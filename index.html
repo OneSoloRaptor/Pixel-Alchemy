@@ -1,31 +1,91 @@
-<!doctype html>
-<html>
-  <head>
-    <title>aura</title>
-  </head>
-  <body>
-    <p>farming</p>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Double Side Tab Layout</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar (Navigation) */
+    .sidebar-left {
+      width: 200px;
+      background-color: #222;
+      color: white;
+      overflow-y: auto;
+      padding: 20px 10px;
+    }
+
+    .sidebar-left a {
+      display: block;
+      padding: 10px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .sidebar-left a:hover {
+      background-color: #444;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* Right Sidebar (Text Panel) */
+    .sidebar-right {
+      width: 250px;
+      background-color: #f4f4f4;
+      border-left: 1px solid #ccc;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Scrollable Navigation -->
+  <div class="sidebar-left">
+    <h3>Menu</h3>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
+    <a href="#">Services</a>
+    <a href="#">Blog</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Gallery</a>
+    <a href="#">Careers</a>
+    <a href="#">FAQ</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Welcome!</h1>
+    <p>This is the main area of your website. Here, you can place content like articles, images, forms, or whatever your site needs.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec eros nec justo malesuada blandit. Mauris at porta orci. Sed a turpis et quam facilisis tincidunt. Donec dapibus, magna et varius porttitor, justo urna convallis nisi, ut viverra neque massa nec velit.</p>
+  </div>
+
+  <!-- Right Sidebar (Text Panel) -->
+  <div class="sidebar-right">
+    <h3>Notes</h3>
+    <p>This panel displays helpful text or supplementary information.</p>
+    <p>You can use this to show previews, summaries, documentation, or context-sensitive help for your content.</p>
+  </div>
+
+</body>
 </html>
-<!-- Tab links -->
-<div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-</div>
 
-<!-- Tab content -->
-<div id="London" class="tabcontent">
-  <h3>London</h3>
-  <p>London is the capital city of England.</p>
-</div>
 
-<div id="Paris" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p>
-</div>
-
-<div id="Tokyo" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
-</div>
