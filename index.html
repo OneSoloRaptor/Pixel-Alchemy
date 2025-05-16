@@ -1,269 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Little Alchemy Style Interface</title>
-    <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-    }
-
-    .main-area {
-      flex-grow: 1;
-      background: linear-gradient(to bottom right, #eef2f3, #dbe5ea);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .draggable {
-      position: absolute;
-      padding: 10px 15px;
-      background: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: move;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      user-select: none;
-    }
-
-    .draggable:hover {
-      background: #0056b3;
-    }
-
-    .sidebar-container {
-      width: 300px;
-      background: #f8f8f8;
-      border-left: 1px solid #ccc;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s ease;
-    }
-
-    .tab-buttons {
-      display: flex;
-    }
-
-    .tab-buttons button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      background: #ddd;
-      transition: background 0.2s;
-    }
-
-    .tab-buttons button:hover {
-      background: #ccc;
-    }
-
-    .tab-buttons button.active {
-      background: #bbb;
-    }
-
-    .tab-content {
-      flex-grow: 1;
-      overflow-y: auto;
-      padding: 10px;
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .element-button {
-      display: block;
-      margin: 5px 0;
-      padding: 8px 10px;
-      background: #0099cc;
-      color: white;
-      border: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-
-    .element-button:hover {
-      background: #0077aa;
-    }
-
-    .discovery {
-      background: #ffffff;
-      padding: 10px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-      border-radius: 5px;
-    }
-
-    .discovery h4 {
-      margin-top: 0;
-    }
-
-    .trash-can {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 80px;
-      height: 80px;
-      background: #888;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 32px;
-      transition: background 0.3s ease;
-      z-index: 100;
-    }
-
-    .trash-can.hovered {
-      background: #c0392b;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CSA Alchemy Game</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <h1>CSA Alchemy Alchemy</h1>
 
-  <!-- Main Play Area -->
-  <div class="main-area" id="mainArea">
-    <div class="trash-can" id="trashCan">🗑️</div>
+  <div id="tabs">
+    <button id="sandbox-tab" class="active">Sandbox</button>
+    <button id="discovery-tab">Discovery</button>
   </div>
 
-  <!-- Right Sidebar -->
-  <div class="sidebar-container">
-    <div class="tab-buttons">
-      <button id="tab1Btn" class="active">Elements</button>
-      <button id="tab2Btn">Discovered</button>
-    </div>
+  <div id="sandbox" class="tab-content"></div>
+  <div id="discovery" class="tab-content" style="display:none;"></div>
 
-    <div class="tab-content active" id="tab1">
-      <button class="element-button" onclick="addElement('Water')">💧 Water</button>
-      <button class="element-button" onclick="addElement('Fire')">🔥 Fire</button>
-      <button class="element-button" onclick="addElement('Earth')">🌍 Earth</button>
-      <button class="element-button" onclick="addElement('Air')">🌬️ Air</button>
-    </div>
-
-    <div class="tab-content" id="tab2">
-      <div id="discoveryList"></div>
-    </div>
+  <div id="controls">
+    <h2>Spawn Base Elements</h2>
+    <div id="spawner-buttons"></div>
   </div>
 
-  <script>
-    const tab1Btn = document.getElementById('tab1Btn');
-    const tab2Btn = document.getElementById('tab2Btn');
-    const tab1 = document.getElementById('tab1');
-    const tab2 = document.getElementById('tab2');
+  <div id="trash" title="Drag cards here to delete">🗑️ Trash</div>
 
-    const mainArea = document.getElementById('mainArea');
-    const discoveryList = document.getElementById('discoveryList');
-    const trashCan = document.getElementById('trashCan');
-
-    const discovered = new Set();
-    const explanations = {
-      "Water": "Water is a transparent, tasteless liquid that forms the world's streams, lakes, and oceans.",
-      "Fire": "Fire is a rapid chemical reaction of combustion, producing heat and light.",
-      "Earth": "Earth represents soil or ground, often used as a base element.",
-      "Air": "Air is the invisible gaseous substance surrounding the Earth, essential for breathing."
-    };
-
-    tab1Btn.addEventListener('click', () => {
-      tab1.classList.add('active');
-      tab2.classList.remove('active');
-      tab1Btn.classList.add('active');
-      tab2Btn.classList.remove('active');
-    });
-
-    tab2Btn.addEventListener('click', () => {
-      tab2.classList.add('active');
-      tab1.classList.remove('active');
-      tab2Btn.classList.add('active');
-      tab1Btn.classList.remove('active');
-    });
-
-    function addElement(name) {
-      const el = document.createElement('div');
-      el.className = 'draggable';
-      el.textContent = name;
-      el.style.top = Math.random() * 300 + 'px';
-      el.style.left = Math.random() * 300 + 'px';
-      makeDraggable(el);
-      mainArea.appendChild(el);
-
-      if (!discovered.has(name)) {
-        discovered.add(name);
-        const div = document.createElement('div');
-        div.className = 'discovery';
-        div.innerHTML = `<h4>${name}</h4><p>${explanations[name]}</p>`;
-        discoveryList.appendChild(div);
-      }
-    }
-
-    function makeDraggable(el) {
-      let offsetX, offsetY;
-      let isDragging = false;
-
-      el.onmousedown = function(e) {
-        isDragging = true;
-        bringToFront(el);
-        offsetX = e.clientX - el.offsetLeft;
-        offsetY = e.clientY - el.offsetTop;
-
-        document.onmousemove = function(e) {
-          if (!isDragging) return;
-          const x = e.clientX - offsetX;
-          const y = e.clientY - offsetY;
-          el.style.left = x + 'px';
-          el.style.top = y + 'px';
-
-          // Check if over trash can
-          const trashRect = trashCan.getBoundingClientRect();
-          const elRect = el.getBoundingClientRect();
-          if (
-            elRect.right > trashRect.left &&
-            elRect.left < trashRect.right &&
-            elRect.bottom > trashRect.top &&
-            elRect.top < trashRect.bottom
-          ) {
-            trashCan.classList.add('hovered');
-          } else {
-            trashCan.classList.remove('hovered');
-          }
-        };
-
-        document.onmouseup = function() {
-          isDragging = false;
-
-          const trashRect = trashCan.getBoundingClientRect();
-          const elRect = el.getBoundingClientRect();
-          if (
-            elRect.right > trashRect.left &&
-            elRect.left < trashRect.right &&
-            elRect.bottom > trashRect.top &&
-            elRect.top < trashRect.bottom
-          ) {
-            el.remove();
-          }
-
-          trashCan.classList.remove('hovered');
-          document.onmousemove = null;
-          document.onmouseup = null;
-        };
-      };
-    }
-
-    function bringToFront(el) {
-      const maxZ = Array.from(document.querySelectorAll('.draggable'))
-        .map(e => parseInt(window.getComputedStyle(e).zIndex) || 0)
-        .reduce((a, b) => Math.max(a, b), 0);
-      el.style.zIndex = maxZ + 1;
-    }
-  </script>
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
