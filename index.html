@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CSA Alchemy Game</title>
-<link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Alchemy Clone</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>CSA Alchemy Alchemy</h1>
-
-  <div id="tabs">
-    <button id="sandbox-tab" class="active">Sandbox</button>
-    <button id="discovery-tab">Discovery</button>
-  </div>
-
-  <div id="sandbox" class="tab-content"></div>
-  <div id="discovery" class="tab-content" style="display:none;"></div>
-
-  <div id="controls">
-    <h2>Spawn Base Elements</h2>
-    <div id="spawner-buttons"></div>
-  </div>
-
-  <div id="trash" title="Drag cards here to delete">🗑️ Trash</div>
-
-<script src="script.js"></script>
+    <h1>Little Alchemy Clone</h1>
+    <div id="elements">
+        <div class="element" draggable="true" data-element="fire">🔥 Fire</div>
+        <div class="element" draggable="true" data-element="water">💧 Water</div>
+        <div class="element" draggable="true" data-element="earth">🌍 Earth</div>
+        <div class="element" draggable="true" data-element="air">💨 Air</div>
+    </div>
+    <div id="workspace"></div>
+    <script src="script.js"></script>
 </body>
 </html>
