@@ -14,7 +14,7 @@
 
     .main-area {
       flex-grow: 1;
-      background: #eef2f3;
+      background: linear-gradient(to bottom right, #eef2f3, #dbe5ea);
       position: relative;
       overflow: hidden;
     }
@@ -26,6 +26,12 @@
       color: white;
       border-radius: 5px;
       cursor: move;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      user-select: none;
+    }
+
+    .draggable:hover {
+      background: #0056b3;
     }
 
     .sidebar-container {
@@ -47,6 +53,11 @@
       border: none;
       cursor: pointer;
       background: #ddd;
+      transition: background 0.2s;
+    }
+
+    .tab-buttons button:hover {
+      background: #ccc;
     }
 
     .tab-buttons button.active {
@@ -75,6 +86,11 @@
       text-align: left;
       cursor: pointer;
       border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .element-button:hover {
+      background: #0077aa;
     }
 
     .discovery {
@@ -88,22 +104,43 @@
     .discovery h4 {
       margin-top: 0;
     }
+
+    .trash-can {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 80px;
+      height: 80px;
+      background: #888;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+      transition: background 0.3s ease;
+      z-index: 100;
+    }
+
+    .trash-can.hovered {
+      background: #c0392b;
+    }
   </style>
 </head>
 <body>
 
   <!-- Main Play Area -->
-  <div class="main-area" id="mainArea"></div>
+  <div class="main-area" id="mainArea">
+    <div class="trash-can" id="trashCan">🗑️</div>
+  </div>
 
   <!-- Right Sidebar -->
   <div class="sidebar-container">
-    <!-- Tab Switch Buttons -->
     <div class="tab-buttons">
       <button id="tab1Btn" class="active">Elements</button>
       <button id="tab2Btn">Discovered</button>
     </div>
 
-    <!-- Tab 1: Elements -->
     <div class="tab-content active" id="tab1">
       <button class="element-button" onclick="addElement('Water')">💧 Water</button>
       <button class="element-button" onclick="addElement('Fire')">🔥 Fire</button>
@@ -111,7 +148,6 @@
       <button class="element-button" onclick="addElement('Air')">🌬️ Air</button>
     </div>
 
-    <!-- Tab 2: Discovered -->
     <div class="tab-content" id="tab2">
       <div id="discoveryList"></div>
     </div>
@@ -125,6 +161,7 @@
 
     const mainArea = document.getElementById('mainArea');
     const discoveryList = document.getElementById('discoveryList');
+    const trashCan = document.getElementById('trashCan');
 
     const discovered = new Set();
     const explanations = {
@@ -134,7 +171,6 @@
       "Air": "Air is the invisible gaseous substance surrounding the Earth, essential for breathing."
     };
 
-    // Tab switching
     tab1Btn.addEventListener('click', () => {
       tab1.classList.add('active');
       tab2.classList.remove('active');
@@ -149,9 +185,7 @@
       tab1Btn.classList.remove('active');
     });
 
-    // Add element to main area and discovery list
     function addElement(name) {
-      // Create draggable element
       const el = document.createElement('div');
       el.className = 'draggable';
       el.textContent = name;
@@ -160,7 +194,6 @@
       makeDraggable(el);
       mainArea.appendChild(el);
 
-      // Add to discovery
       if (!discovered.has(name)) {
         discovered.add(name);
         const div = document.createElement('div');
@@ -170,24 +203,65 @@
       }
     }
 
-    // Make elements draggable
     function makeDraggable(el) {
       let offsetX, offsetY;
+      let isDragging = false;
+
       el.onmousedown = function(e) {
+        isDragging = true;
+        bringToFront(el);
         offsetX = e.clientX - el.offsetLeft;
         offsetY = e.clientY - el.offsetTop;
+
         document.onmousemove = function(e) {
-          el.style.left = (e.clientX - offsetX) + 'px';
-          el.style.top = (e.clientY - offsetY) + 'px';
+          if (!isDragging) return;
+          const x = e.clientX - offsetX;
+          const y = e.clientY - offsetY;
+          el.style.left = x + 'px';
+          el.style.top = y + 'px';
+
+          // Check if over trash can
+          const trashRect = trashCan.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          if (
+            elRect.right > trashRect.left &&
+            elRect.left < trashRect.right &&
+            elRect.bottom > trashRect.top &&
+            elRect.top < trashRect.bottom
+          ) {
+            trashCan.classList.add('hovered');
+          } else {
+            trashCan.classList.remove('hovered');
+          }
         };
+
         document.onmouseup = function() {
+          isDragging = false;
+
+          const trashRect = trashCan.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          if (
+            elRect.right > trashRect.left &&
+            elRect.left < trashRect.right &&
+            elRect.bottom > trashRect.top &&
+            elRect.top < trashRect.bottom
+          ) {
+            el.remove();
+          }
+
+          trashCan.classList.remove('hovered');
           document.onmousemove = null;
           document.onmouseup = null;
         };
       };
     }
+
+    function bringToFront(el) {
+      const maxZ = Array.from(document.querySelectorAll('.draggable'))
+        .map(e => parseInt(window.getComputedStyle(e).zIndex) || 0)
+        .reduce((a, b) => Math.max(a, b), 0);
+      el.style.zIndex = maxZ + 1;
+    }
   </script>
 </body>
 </html>
-
-
