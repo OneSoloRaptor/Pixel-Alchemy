@@ -3,18 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Little Alchemy Clone</title>
+    <title>Little Alchemy Enhanced</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Little Alchemy Clone</h1>
-    <div id="elements">
-        <div class="element" draggable="true" data-element="fire">🔥 Fire</div>
-        <div class="element" draggable="true" data-element="water">💧 Water</div>
-        <div class="element" draggable="true" data-element="earth">🌍 Earth</div>
-        <div class="element" draggable="true" data-element="air">💨 Air</div>
+
+    <div id="sidebar">
+        <div class="tabs">
+            <button id="items-tab">Items</button>
+            <button id="explanations-tab">Explanations</button>
+        </div>
+        <div id="items-list" class="content">
+            <!-- Discovered items will be added here dynamically -->
+        </div>
+        <div id="explanations-list" class="content hidden">
+            <!-- Clickable items for explanation popup -->
+        </div>
     </div>
-    <div id="workspace"></div>
+
+    <div id="workspace" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <p>Drag elements here to combine them!</p>
+    </div>
+
+    <div id="trash" ondrop="trashDrop(event)" ondragover="allowDrop(event)">
+        🗑️ Trash (Drag items here to delete)
+    </div>
+
+    <div id="popup" class="hidden">
+        <div class="popup-content">
+            <span id="popup-close">&times;</span>
+            <p id="popup-text"></p>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
