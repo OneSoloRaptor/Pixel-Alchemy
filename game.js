@@ -1,137 +1,188 @@
-const elements = [
-  { name: "Class", recipe: [] },
-  { name: "Object", recipe: [] },
-  { name: "Method", recipe: [] },
-  { name: "Variable", recipe: [] },
-  { name: "Loop", recipe: [] },
-  { name: "Conditional", recipe: [] },
+(() => {
+  // CSA objects and their recipes
+  const CSA_ELEMENTS = [
+    { name: "Class", recipe: [] },
+    { name: "Object", recipe: [] },
+    { name: "Method", recipe: [] },
+    { name: "Variable", recipe: [] },
+    { name: "Loop", recipe: [] },
+    { name: "Conditional", recipe: [] },
 
-  { name: "Constructor", recipe: ["Class", "Method"] },
-  { name: "Counter", recipe: ["Variable", "Loop"] },
-  { name: "Parameter", recipe: ["Method", "Variable"] },
-  { name: "Override", recipe: ["Method", "Conditional"] },
-  { name: "Call", recipe: ["Object", "Method"] },
-  { name: "Subclass", recipe: ["Class", "Object"] },
-  { name: "While Loop", recipe: ["Loop", "Conditional"] },
-  { name: "Instance Variable", recipe: ["Class", "Variable"] },
-  { name: "Boolean", recipe: ["Conditional", "Variable"] },
-  { name: "Inheritance", recipe: ["Object", "Class"] },
+    { name: "Constructor", recipe: ["Class", "Method"] },
+    { name: "Counter", recipe: ["Variable", "Loop"] },
+    { name: "Parameter", recipe: ["Method", "Variable"] },
+    { name: "Override", recipe: ["Method", "Conditional"] },
+    { name: "Call", recipe: ["Object", "Method"] },
+    { name: "Subclass", recipe: ["Class", "Object"] },
+    { name: "While Loop", recipe: ["Loop", "Conditional"] },
+    { name: "Instance Variable", recipe: ["Class", "Variable"] },
+    { name: "Boolean", recipe: ["Conditional", "Variable"] },
+    { name: "Inheritance", recipe: ["Object", "Class"] },
 
-  { name: "For Loop", recipe: ["While Loop", "Counter"] },
-  { name: "Polymorphism", recipe: ["Subclass", "Inheritance"] },
-  { name: "Return", recipe: ["Call", "Variable"] },
-  { name: "Signature", recipe: ["Method", "Parameter"] },
-  { name: "Overloading", recipe: ["Signature", "Constructor"] },
-  { name: "If Statement", recipe: ["Boolean", "Call"] },
+    { name: "For Loop", recipe: ["While Loop", "Counter"] },
+    { name: "Polymorphism", recipe: ["Subclass", "Inheritance"] },
+    { name: "Return", recipe: ["Call", "Variable"] },
+    { name: "Signature", recipe: ["Method", "Parameter"] },
+    { name: "Overloading", recipe: ["Signature", "Constructor"] },
+    { name: "If Statement", recipe: ["Boolean", "Call"] },
 
-  { name: "Scope", recipe: ["Method", "Loop"] },
-  { name: "This Keyword", recipe: ["Instance Variable", "Call"] },
-  { name: "Default Constructor", recipe: ["Constructor", "Subclass"] },
-  { name: "Abstract Class", recipe: ["Polymorphism", "Class"] },
-  { name: "Nested Loop", recipe: ["Loop", "For Loop"] },
-  { name: "Static Variable", recipe: ["Class", "Boolean"] },
-  { name: "Getter/Setter", recipe: ["Method", "Inheritance"] },
-];
+    { name: "Scope", recipe: ["Method", "Loop"] },
+    { name: "This Keyword", recipe: ["Instance Variable", "Call"] },
+    { name: "Default Constructor", recipe: ["Constructor", "Subclass"] },
+    { name: "Abstract Class", recipe: ["Polymorphism", "Class"] },
+    { name: "Nested Loop", recipe: ["Loop", "For Loop"] },
+    { name: "Static Variable", recipe: ["Class", "Boolean"] },
+    { name: "Getter/Setter", recipe: ["Method", "Inheritance"] }
+  ];
 
-const combinations = {};
-elements.forEach(({ name, recipe }) => {
-  if (recipe.length === 2) {
-    const key = [recipe[0], recipe[1]].sort().join("+");
-    combinations[key] = name;
+  // DOM references
+  const sandbox = document.getElementById("sandbox");
+  const discovery = document.getElementById("discovery");
+  const spawnerButtonsContainer = document.getElementById("spawner-buttons");
+  const trash = document.getElementById("trash");
+  const sandboxTabBtn = document.getElementById("sandbox-tab");
+  const discoveryTabBtn = document.getElementById("discovery-tab");
+
+  // Track discovered elements
+  const discovered = new Set();
+
+  // For drag and drop state
+  let dragSource = null;
+
+  // Spawn base elements buttons (those with empty recipe)
+  function initSpawner() {
+    CSA_ELEMENTS.filter(el => el.recipe.length === 0).forEach(el => {
+      const btn = document.createElement("button");
+      btn.textContent = el.name;
+      btn.classList.add("spawner");
+      btn.dataset.name = el.name;
+      btn.addEventListener("click", () => spawnElement(el.name));
+      spawnerButtonsContainer.appendChild(btn);
+    });
   }
-});
 
-const discovered = new Set();
-const sandbox = document.getElementById("sandbox");
-const discovery = document.getElementById("discovery");
-const trash = document.getElementById("trash");
+  // Create a card element in sandbox
+  function createCard(name) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.textContent = name;
+    card.dataset.name = name;
+    makeDraggable(card);
+    return card;
+  }
 
-function createElementCard(name, x = 100, y = 100) {
-  const card = document.createElement("div");
-  card.className = "element";
-  card.textContent = name;
-  card.style.left = `${x}px`;
-  card.style.top = `${y}px`;
-  card.setAttribute("draggable", true);
-  card.dataset.name = name;
+  // Spawn element card in sandbox
+  function spawnElement(name) {
+    if (!discovered.has(name)) {
+      discovered.add(name);
+      updateDiscovery();
+    }
+    const card = createCard(name);
+    sandbox.appendChild(card);
+  }
 
-  card.addEventListener("dragstart", (e) => {
-    e.dataTransfer.setData("text/plain", name);
-    e.dataTransfer.setData("source-id", e.target.id || "");
-  });
+  // Update discovery tab
+  function updateDiscovery() {
+    discovery.innerHTML = "";
+    // Sort discovered alphabetically for easier browsing
+    const arr = Array.from(discovered).sort();
+    arr.forEach(name => {
+      const el = createCard(name);
+      el.style.cursor = "default";
+      el.draggable = false;
+      discovery.appendChild(el);
+    });
+  }
 
-  card.addEventListener("dragover", (e) => e.preventDefault());
+  // Make a card draggable with drag-drop events
+  function makeDraggable(card) {
+    card.draggable = true;
 
-  card.addEventListener("drop", (e) => {
+    card.addEventListener("dragstart", e => {
+      dragSource = card;
+      card.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", card.dataset.name);
+      // Needed for Firefox
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    card.addEventListener("dragend", e => {
+      dragSource = null;
+      card.classList.remove("dragging");
+      trash.classList.remove("drag-over");
+    });
+
+    card.addEventListener("dragover", e => {
+      e.preventDefault();
+    });
+
+    card.addEventListener("drop", e => {
+      e.preventDefault();
+      if (!dragSource || dragSource === card) return;
+
+      const nameA = dragSource.dataset.name;
+      const nameB = card.dataset.name;
+
+      // Try combining nameA + nameB OR nameB + nameA
+      const combinedName = tryCombine(nameA, nameB) || tryCombine(nameB, nameA);
+      if (combinedName) {
+        // Spawn new combined element
+        spawnElement(combinedName);
+        // Remove combined originals
+        dragSource.remove();
+        card.remove();
+      }
+    });
+  }
+
+  // Check if two elements combine to create a new one
+  function tryCombine(a, b) {
+    for (const el of CSA_ELEMENTS) {
+      if (el.recipe.length === 2) {
+        // Check if recipe matches a + b in any order
+        if (
+          (el.recipe[0] === a && el.recipe[1] === b) ||
+          (el.recipe[0] === b && el.recipe[1] === a)
+        ) {
+          return el.name;
+        }
+      }
+    }
+    return null;
+  }
+
+  // Trash drag/drop
+  trash.addEventListener("dragover", e => {
     e.preventDefault();
-    const from = e.dataTransfer.getData("text/plain");
-    const to = card.dataset.name;
-    const comboKey = [from, to].sort().join("+");
-
-    if (combinations[comboKey]) {
-      const newName = combinations[comboKey];
-      spawnElement(newName, e.clientX, e.clientY);
-      card.remove();
-      const fromId = e.dataTransfer.getData("source-id");
-      if (fromId) document.getElementById(fromId)?.remove();
+    trash.classList.add("drag-over");
+  });
+  trash.addEventListener("dragleave", e => {
+    trash.classList.remove("drag-over");
+  });
+  trash.addEventListener("drop", e => {
+    e.preventDefault();
+    if (dragSource) {
+      dragSource.remove();
+      trash.classList.remove("drag-over");
+      dragSource = null;
     }
   });
 
-  card.id = "card-" + Math.random().toString(36).substr(2, 9);
-  return card;
-}
-
-function spawnElement(name, x = 100, y = 100) {
-  if (!discovered.has(name)) {
-    discovered.add(name);
-    updateDiscovery();
-  }
-  const card = createElementCard(name, x, y);
-  sandbox.appendChild(card);
-}
-
-function updateDiscovery() {
-  discovery.innerHTML = "";
-  Array.from(discovered)
-    .sort()
-    .forEach((name) => {
-      const item = document.createElement("div");
-      item.className = "discovered-item";
-      item.textContent = name;
-      discovery.appendChild(item);
-    });
-}
-
-trash.addEventListener("dragover", (e) => e.preventDefault());
-trash.addEventListener("drop", (e) => {
-  e.preventDefault();
-  const id = e.dataTransfer.getData("source-id");
-  const elem = document.getElementById(id);
-  if (elem) elem.remove();
-});
-
-document.querySelectorAll(".spawner").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const name = btn.dataset.name;
-    spawnElement(name);
+  // Tabs switching
+  sandboxTabBtn.addEventListener("click", () => {
+    sandboxTabBtn.classList.add("active");
+    discoveryTabBtn.classList.remove("active");
+    sandbox.style.display = "";
+    discovery.style.display = "none";
   });
-});
+  discoveryTabBtn.addEventListener("click", () => {
+    discoveryTabBtn.classList.add("active");
+    sandboxTabBtn.classList.remove("active");
+    sandbox.style.display = "none";
+    discovery.style.display = "";
+    updateDiscovery();
+  });
 
-document.getElementById("sandbox-tab").addEventListener("click", () => {
-  document.getElementById("sandbox-tab").classList.add("active");
-  document.getElementById("discovery-tab").classList.remove("active");
-  sandbox.style.display = "block";
-  discovery.style.display = "none";
-});
-
-document.getElementById("discovery-tab").addEventListener("click", () => {
-  document.getElementById("discovery-tab").classList.add("active");
-  document.getElementById("sandbox-tab").classList.remove("active");
-  sandbox.style.display = "none";
-  discovery.style.display = "block";
-});
-
-// Initial spawn
-["Class", "Object", "Method", "Variable", "Loop", "Conditional"].forEach((name) =>
-  spawnElement(name)
-);
+  // Initialize everything
+  initSpawner();
+})();
