@@ -4,23 +4,75 @@ body {
     background-color: #f8f8f8;
 }
 
-#elements {
+#sidebar {
+    position: fixed;
+    left: 10px;
+    top: 50px;
+    width: 200px;
+    background: #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.tabs {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+    justify-content: space-between;
+}
+
+button {
+    width: 48%;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.content {
+    display: none;
+    height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid #333;
+    margin-top: 5px;
+}
+
+.hidden {
+    display: none;
 }
 
 .element {
-    padding: 10px;
-    background-color: #ddd;
-    border: 1px solid #999;
+    padding: 5px;
+    background-color: #ccc;
+    margin: 5px;
     cursor: grab;
 }
 
 #workspace {
-    margin-top: 50px;
+    margin: 50px auto;
+    width: 300px;
     min-height: 200px;
     border: 2px dashed #333;
     padding: 20px;
+}
+
+#trash {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: red;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#popup {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    background: white;
+    padding: 20px;
+    border: 2px solid #333;
+}
+
+#popup-close {
+    cursor: pointer;
+    float: right;
 }
