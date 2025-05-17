@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mini Little Alchemy</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CS Alchemy Game</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="main-area" id="mainArea"></div>
-    <div class="sidebar">
-      <h2>Elements</h2>
-      <div id="baseElements"></div>
-      <h2>Discovered</h2>
-      <div id="discoveredElements"></div>
+  <h1>Computer Science Alchemy</h1>
+  <div id="game">
+    <div id="elements-container">
+      <h2>Discovered Elements</h2>
+      <div id="elements"></div>
+    </div>
+    <div id="workspace-container">
+      <h2>Workspace</h2>
+      <div id="workspace"></div>
     </div>
   </div>
-
-  <script src="app.js"></script>
+  <div id="instructions">
+    <p>Click to move elements to workspace. Combine two to discover new ones!</p>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
