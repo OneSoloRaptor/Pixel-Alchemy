@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Little Alchemy Clone</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>Really Little Alchemy</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- CreateJS and jQuery libraries -->
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Little Alchemy Clone</h1>
-  </header>
-  <main>
-    <section id="elements-panel">
-      <h2>Elements</h2>
-      <div id="elements-container"></div>
-    </section>
-    <section id="workspace">
-      <h2>Workspace</h2>
-      <div id="workspace-container"></div>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+  <div class="top-bar">
+    <button class="cheat">Unlock All</button>
+    <img class="mute" src="./assets/img/unmute.png" alt="false" />
+    <button class="about">About</button>
+  </div>
+  <div class="scrollbar">
+    <div class="bar"></div>
+  </div>
+  <canvas id="bodyCanvas" width="1000" height="1000"></canvas>
+  <script src="main.js"></script>
 </body>
 </html>
