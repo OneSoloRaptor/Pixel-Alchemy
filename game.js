@@ -1,242 +1,148 @@
-// Elements data with descriptions
-const elementsData = {
-  'bit': {
-    description: 'The smallest unit of data in computing, representing a 0 or 1.',
-  },
-  'logic': {
-    description: 'A system of rules for reasoning and decision making.',
-  },
-  'byte': {
-    description: 'A group of 8 bits, representing a data unit.',
-  },
-  'if statement': {
-    description: 'A control structure for conditional execution in programming.',
-  },
-  'loop': {
-    description: 'A programming structure that repeats a set of instructions.',
-  },
-  'array': {
-    description: 'A collection of elements identified by index or key.',
-  },
-  'function': {
-    description: 'A reusable block of code designed to perform a specific task.',
-  },
-  'program': {
-    description: 'A sequence of instructions written to perform a specific task.',
-  },
-  'AI': {
-    description: 'Artificial Intelligence: systems designed to perform tasks that normally require human intelligence.',
-  },
-  'machine learning': {
-    description: 'A subset of AI focused on building systems that learn from data.',
-  }
+// Data: elements and combinations
+const baseElements = [
+  { id: "air", name: "Air" },
+  { id: "earth", name: "Earth" },
+  { id: "fire", name: "Fire" },
+  { id: "water", name: "Water" },
+];
+
+const combinations = {
+  // key: "id1+id2" sorted alphabetically
+  "air+earth": { id: "dust", name: "Dust" },
+  "air+fire": { id: "energy", name: "Energy" },
+  "air+water": { id: "rain", name: "Rain" },
+  "earth+fire": { id: "lava", name: "Lava" },
+  "earth+water": { id: "mud", name: "Mud" },
+  "fire+water": { id: "steam", name: "Steam" },
+  "dust+fire": { id: "ash", name: "Ash" },
+  "lava+air": { id: "stone", name: "Stone" },
+  "mud+fire": { id: "brick", name: "Brick" },
+  "rain+earth": { id: "plant", name: "Plant" },
+  "energy+plant": { id: "life", name: "Life" },
+  "stone+water": { id: "pebble", name: "Pebble" },
 };
 
-// Recipes: merge two keys (alphabetical order joined by '+') to get new element
-const recipes = {
-  'bit+bit': 'byte',
-  'byte+logic': 'if statement',
-  'byte+if statement': 'loop',
-  'byte+loop': 'array',
-  'array+logic': 'function',
-  'byte+function': 'program',
-  'function+logic': 'AI',
-  'AI+byte': 'machine learning'
-};
-
-let discoveredElements = ['bit', 'logic']; // start with these discovered
+// State
+let discoveredElements = [...baseElements];
 let workspaceElements = [];
 
-const elementsList = document.getElementById('elements-list');
-const workspaceArea = document.getElementById('workspace-area');
-const sidebarDesc = document.getElementById('sidebar-desc');
-const descContent = document.getElementById('desc-content');
-const popup = document.getElementById('popup');
-const toggleDescBtn = document.getElementById('toggle-desc');
+// DOM references
+const elementsContainer = document.getElementById("elements-container");
+const workspaceContainer = document.getElementById("workspace-container");
 
-toggleDescBtn.addEventListener('click', () => {
-  sidebarDesc.classList.toggle('hidden');
-});
+// Drag state
+let dragSrcEl = null;
 
-function renderElementsList() {
-  elementsList.innerHTML = '';
-  discoveredElements.forEach(name => {
-    const el = document.createElement('div');
-    el.className = 'element';
-    el.textContent = name;
-    el.setAttribute('draggable', 'true');
-    el.dataset.name = name;
+// Helper: sort ids alphabetically
+function getKey(id1, id2) {
+  return [id1, id2].sort().join("+");
+}
 
-    // Drag start event for sidebar elements
-    el.addEventListener('dragstart', dragStartHandler);
-
-    // Click to show description
-    el.addEventListener('click', () => {
-      showDescription(name);
-      if (sidebarDesc.classList.contains('hidden')) {
-        sidebarDesc.classList.remove('hidden');
-      }
-    });
-
-    elementsList.appendChild(el);
+// Render functions
+function renderElementsPanel() {
+  elementsContainer.innerHTML = "";
+  discoveredElements.forEach((el) => {
+    const div = document.createElement("div");
+    div.classList.add("element");
+    div.setAttribute("draggable", "true");
+    div.dataset.id = el.id;
+    div.textContent = el.name;
+    elementsContainer.appendChild(div);
   });
 }
 
 function renderWorkspace() {
-  workspaceArea.innerHTML = '';
-  workspaceElements.forEach((name, index) => {
-    const el = document.createElement('div');
-    el.className = 'workspace-element';
-    el.textContent = name;
-    el.setAttribute('draggable', 'true');
-    el.dataset.name = name;
-    el.dataset.index = index;
-
-    el.addEventListener('dragstart', dragStartHandler);
-    el.addEventListener('dragover', dragOverHandler);
-    el.addEventListener('drop', dropHandlerWorkspace);
-
-    // Click shows description for workspace element
-    el.addEventListener('click', () => {
-      showDescription(name);
-      if (sidebarDesc.classList.contains('hidden')) {
-        sidebarDesc.classList.remove('hidden');
-      }
-    });
-
-    workspaceArea.appendChild(el);
+  workspaceContainer.innerHTML = "";
+  workspaceElements.forEach((el) => {
+    const div = document.createElement("div");
+    div.classList.add("element");
+    div.setAttribute("draggable", "true");
+    div.dataset.id = el.id;
+    div.textContent = el.name;
+    workspaceContainer.appendChild(div);
   });
 }
 
-// Drag and Drop handlers
-let draggedElementName = null;
-let draggedWorkspaceIndex = null;
-
-function dragStartHandler(e) {
-  const target = e.target;
-  draggedElementName = target.dataset.name;
-
-  // For workspace elements, also track index for rearranging
-  if (target.classList.contains('workspace-element')) {
-    draggedWorkspaceIndex = Number(target.dataset.index);
-  } else {
-    draggedWorkspaceIndex = null;
-  }
-
-  e.dataTransfer.effectAllowed = 'move';
-  // Use a custom drag image or default
-  e.dataTransfer.setData('text/plain', draggedElementName);
+// Add element from elements panel to workspace on drag start + drop
+function handleDragStart(e) {
+  dragSrcEl = e.target;
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", e.target.dataset.id);
+  e.target.classList.add("dragging");
 }
 
-function dragOverHandler(e) {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
+function handleDragEnd(e) {
+  e.target.classList.remove("dragging");
 }
 
-function dropHandlerWorkspace(e) {
+function handleDragOver(e) {
   e.preventDefault();
-  const dropTarget = e.target;
-  if (!dropTarget.classList.contains('workspace-element')) {
-    // Dropped on workspace blank area
-    if (draggedWorkspaceIndex !== null) {
-      // Moving workspace element within workspace: reorder not implemented for simplicity
-      // Just do nothing for now
-      return;
-    }
-    if (draggedElementName) {
-      // Add element from sidebar to workspace
-      workspaceElements.push(draggedElementName);
-      renderWorkspace();
-    }
-    return;
-  }
+  e.dataTransfer.dropEffect = "move";
+}
 
-  // Dropped on an existing workspace element: try to merge
-  const dropTargetName = dropTarget.dataset.name;
-  const dropTargetIndex = Number(dropTarget.dataset.index);
+function handleDrop(e) {
+  e.preventDefault();
+  const draggedId = e.dataTransfer.getData("text/plain");
+  const target = e.target.closest(".element");
+  if (!target) return;
 
-  if (draggedWorkspaceIndex === dropTargetIndex) {
-    return; // dropped on itself - ignore
-  }
+  const targetId = target.dataset.id;
+  if (!targetId || !draggedId) return;
 
-  const combo = tryCombine(draggedElementName, dropTargetName);
-  if (combo) {
-    // Replace dropped-on element with new combo element
-    workspaceElements.splice(dropTargetIndex, 1, combo);
+  // Prevent combining the same element with itself
+  if (draggedId === targetId) return;
 
-    // Remove dragged element if it was workspace element (to avoid duplicates)
-    if (draggedWorkspaceIndex !== null) {
-      // Remove dragged element (index might change if dragged is after dropTarget)
-      const removedIndex = draggedWorkspaceIndex > dropTargetIndex ? draggedWorkspaceIndex + 1 : draggedWorkspaceIndex;
-      workspaceElements.splice(removedIndex, 1);
-    } else {
-      // dragged from sidebar, just add new combo, remove dragged from workspaceElements if any? N/A
+  // Check if combination exists
+  const key = getKey(draggedId, targetId);
+  if (combinations[key]) {
+    const newElement = combinations[key];
+
+    // Check if discovered
+    if (!discoveredElements.find((el) => el.id === newElement.id)) {
+      discoveredElements.push(newElement);
+      alert(`You created: ${newElement.name}!`);
+      renderElementsPanel();
     }
 
-    if (!discoveredElements.includes(combo)) {
-      discoveredElements.push(combo);
-      renderElementsList();
-      showPopup(`New element discovered: ${combo}`);
-    }
-
-    renderWorkspace();
-  } else {
-    // No combo, if dragged was workspace element, reorder workspace
-    if (draggedWorkspaceIndex !== null) {
-      // Move dragged element to dropTargetIndex
-      const draggedEl = workspaceElements.splice(draggedWorkspaceIndex, 1)[0];
-      workspaceElements.splice(dropTargetIndex, 0, draggedEl);
-      renderWorkspace();
-    } else {
-      // If dragged from sidebar, just add to workspace
-      workspaceElements.push(draggedElementName);
+    // Add new element to workspace if not there
+    if (!workspaceElements.find((el) => el.id === newElement.id)) {
+      workspaceElements.push(newElement);
       renderWorkspace();
     }
   }
-  draggedElementName = null;
-  draggedWorkspaceIndex = null;
 }
 
-function tryCombine(a, b) {
-  if (!a || !b) return null;
-  const pair1 = [a, b].sort().join('+');
-  return recipes[pair1] || null;
-}
-
-function showDescription(name) {
-  if (!name) {
-    descContent.innerHTML = '<p>Select an element to see its description here.</p>';
-    return;
-  }
-  const desc = elementsData[name]?.description || 'No description available.';
-  descContent.innerHTML = `<h3>${name}</h3><p>${desc}</p>`;
-}
-
-function showPopup(text) {
-  popup.textContent = text;
-  popup.classList.remove('hidden');
-  setTimeout(() => {
-    popup.classList.add('hidden');
-  }, 2500);
-}
-
-// Workspace drop zone also needs a drop event to allow adding from sidebar
-workspaceArea.addEventListener('dragover', e => {
+function handleElementsPanelDrop(e) {
   e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-});
-workspaceArea.addEventListener('drop', e => {
-  e.preventDefault();
-  if (draggedWorkspaceIndex !== null) {
-    // dragging workspace element on blank space: do nothing (for now)
-    return;
-  }
-  if (draggedElementName) {
-    workspaceElements.push(draggedElementName);
-    renderWorkspace();
-  }
-});
+  // Dragging element from workspace back to elements panel (optional)
+  const draggedId = e.dataTransfer.getData("text/plain");
+  if (!draggedId) return;
 
-renderElementsList();
-renderWorkspace();
-showDescription(null);
+  // Allow dragging elements from workspace to elements panel if desired
+  // (Currently no action)
+}
+
+// Initialize workspace with base elements to drag from elements panel only
+function init() {
+  renderElementsPanel();
+  workspaceElements = [];
+  renderWorkspace();
+
+  // Event delegation for drag on elements panel
+  elementsContainer.addEventListener("dragstart", handleDragStart);
+  elementsContainer.addEventListener("dragend", handleDragEnd);
+
+  // Drag events for workspace container and workspace elements
+  workspaceContainer.addEventListener("dragstart", handleDragStart);
+  workspaceContainer.addEventListener("dragend", handleDragEnd);
+
+  // Allow dropping elements on workspace elements to combine
+  workspaceContainer.addEventListener("dragover", handleDragOver);
+  workspaceContainer.addEventListener("drop", handleDrop);
+
+  // Also allow dropping on elements panel (optional)
+  elementsContainer.addEventListener("dragover", handleDragOver);
+  elementsContainer.addEventListener("drop", handleElementsPanelDrop);
+}
+
+init();
