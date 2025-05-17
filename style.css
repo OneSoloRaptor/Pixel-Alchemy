@@ -1,70 +1,53 @@
-* {
-  box-sizing: border-box;
-  user-select: none;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f9f9f9;
+  color: #333;
 }
-body, html {
-  margin: 0; padding: 0;
-  height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #e0f7fa;
-}
-.container {
-  display: flex;
-  height: 100%;
-}
-.main-area {
-  flex-grow: 1;
-  background: #ffffff;
-  border-right: 2px solid #00796b;
-  position: relative;
-  overflow: hidden;
-}
-.sidebar {
-  width: 300px;
-  background: #004d40;
-  color: white;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-h2 {
-  margin-top: 0;
-  border-bottom: 1px solid #00796b;
-  padding-bottom: 5px;
-}
-#baseElements, #discoveredElements {
-  margin-top: 10px;
-}
-.element-btn {
-  background: #00796b;
-  border: none;
-  color: white;
-  padding: 8px;
-  margin: 5px 0;
-  width: 100%;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
+
+h1 {
   text-align: center;
-  transition: background-color 0.2s ease;
+  color: #2c3e50;
 }
-.element-btn:hover {
-  background: #004d40;
+
+#game {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
-.draggable {
-  position: absolute;
-  background: #26a69a;
-  padding: 8px 12px;
-  border-radius: 6px;
+
+#elements-container, #workspace-container {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  width: 45%;
+  min-height: 300px;
+  background: #fff;
+}
+
+#elements, #workspace {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.element {
+  background: #3498db;
   color: white;
-  cursor: grab;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
   user-select: none;
-  white-space: nowrap;
+  font-weight: bold;
 }
-.draggable:active {
-  cursor: grabbing;
-  opacity: 0.85;
+
+#instructions {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #555;
 }
