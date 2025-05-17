@@ -1,26 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CS Alchemy Game</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CS Alchemy</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Computer Science Alchemy</h1>
-  <div id="game">
-    <div id="elements-container">
-      <h2>Discovered Elements</h2>
-      <div id="elements"></div>
-    </div>
-    <div id="workspace-container">
+  <header>
+    <h1>Computer Science Alchemy</h1>
+    <button id="toggle-desc">Toggle Descriptions</button>
+  </header>
+
+  <div id="container">
+    <!-- Left sidebar with discovered elements -->
+    <aside id="sidebar-elements">
+      <h2>Elements</h2>
+      <div id="elements-list"></div>
+    </aside>
+
+    <!-- Main workspace where you drag/drop -->
+    <main id="workspace" aria-label="Workspace">
       <h2>Workspace</h2>
-      <div id="workspace"></div>
-    </div>
+      <div id="workspace-area"></div>
+    </main>
+
+    <!-- Right sidebar for descriptions -->
+    <aside id="sidebar-desc" class="hidden">
+      <h2>Description</h2>
+      <div id="desc-content">
+        <p>Select an element to see its description here.</p>
+      </div>
+    </aside>
   </div>
-  <div id="instructions">
-    <p>Click to move elements to workspace. Combine two to discover new ones!</p>
-  </div>
-  <script src="script.js"></script>
+
+  <!-- Popup for new element discovered -->
+  <div id="popup" class="hidden"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
