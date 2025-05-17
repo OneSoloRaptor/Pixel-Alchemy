@@ -1,175 +1,70 @@
-//Little Alchemy Engine
-//Goals: Need a "simple" format for students to create their universe from:
-let universe = {
-  "fire": {
-    displayName: "Fire",
-    combinations: {
-      "water":"steam",
-      "fire":"sun"
-    },
-    isStartingItem: true,
-    imageURL: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Icon-Campfire.svg"
-  },
-  "sun": {
-    displayName: "Sun",
-    combinations: {
-      "rain":"rainbow"
-    },
-    isStartingItem: false,
-    imageURL: "https://roundicons.com/wp-content/uploads/2017/08/sun-Doodle-Icons.png"
-  },
-  "cloud": {
-    displayName: "Cloud",
-    combinations: {
-      "water":"rain"
-    },
-    isStartingItem: false,
-    imageURL: "https://tistatech.com/wp-content/uploads/2017/01/cloud-icon.png"
-  },
-  "rain": {
-    displayName: "Rain",
-    combinations: {
-      "sun":"rainbow"
-    },
-    isStartingItem: false,
-    imageURL: "https://cdn.iconscout.com/icon/premium/png-256-thumb/rain-2110017-1775370.png"
-  },
-  "rainbow": {
-    displayName: "Rainbow",
-    combinations: {
-    },
-    isStartingItem: false,
-    imageURL: "https://cdn.iconscout.com/icon/premium/png-256-thumb/rainbow-175-672817.png"
-  },   
-  "water": {
-    displayName: "Water",
-    combinations: {
-      "fire":"steam",
-      "steam":"cloud",
-      "cloud":"rain"
-    },
-    isStartingItem: true,
-    imageURL: "https://zerodraftmd.com/wp-content/uploads/2016/06/water-icon.png"
-  },
-  "steam": {
-    displayName: "Steam",
-    combinations: {
-      "water":"cloud"
-    },
-    isStartingItem: false,
-    imageURL: "https://clipartstation.com/wp-content/uploads/2018/09/boiling-water-clipart-7.jpg"
-  }
+* {
+  box-sizing: border-box;
+  user-select: none;
 }
-
-let createGameState = function(universe){
-  let elements = Object.keys(universe);
-  let hydrateEl = function(elID, universe){
-    let result = JSON.parse(JSON.stringify(universe[elID]));
-    result.isDiscovered = result.isStartingItem;
-    result.id = elID;
-    return result;
-  };
-
-  let undiscovered = {};
-  let discovered = {};
-  elements.map(elID=>{
-    if (universe[elID].isStartingItem){
-      discovered[elID] = hydrateEl(elID, universe);
-    } else {
-      undiscovered[elID] = hydrateEl(elID, universe); 
-    }
-  });
-  let gameObj = {
-    "discovered": discovered,
-    "undiscovered": undiscovered,
-    "universe": universe,
-    "attempts": 0,
-    "mixing":[]
-  };
-  //obj.universe is an object with raw data -- use for lookups, 
-  //discovered is an object of objects with .id and .discovered keys
-  //undiscovered is an object with .id and .discovered keys added
-  //I will lookup in undiscovered and MOVE TO discovered
-  return gameObj;
-};
-
-let saveGame = function(gameState){
-  localStorage.setItem("alchemySave", JSON.stringify(gameState));
+body, html {
+  margin: 0; padding: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #e0f7fa;
 }
-
-let loadGame = function(){
-  let localread = localStorage.getItem("alchemySave");
-  if (!localread){
-    return createGameState(universe);
-  }
-  return JSON.parse(localread);
+.container {
+  display: flex;
+  height: 100%;
 }
-
-gameState = loadGame();
-
-let getImg = function(elID){
-  console.log("img for ",elID);
-  return  `<img class="icon" src="${gameState.universe[elID].imageURL}">`;
+.main-area {
+  flex-grow: 1;
+  background: #ffffff;
+  border-right: 2px solid #00796b;
+  position: relative;
+  overflow: hidden;
 }
-
-let renderMix = function(){
-  if (gameState.mixing.length == 0){
-    $("#mix").html("");
-    return;
-  } else if (gameState.mixing.length == 1){
-    $("#mix").html(`Mix ${getImg(gameState.mixing[0])} with ???`);
-  }
-};
-
-let discoverNew = function(newEl){
-  let undiscovered = gameState.undiscovered[newEl];
-  undiscovered.isDiscovered = true;
-  delete gameState.undiscovered[newEl];
-  gameState.discovered[newEl] = undiscovered;
-  return renderDiscovered()
+.sidebar {
+  width: 300px;
+  background: #004d40;
+  color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
-
-let makeMix = function(){
-  let twoEls = JSON.parse(JSON.stringify(gameState.mixing));
-  gameState.mixing = [];
-  if (gameState.universe[twoEls[0]].combinations.hasOwnProperty(twoEls[1])){
-    let newElement = gameState.universe[twoEls[0]].combinations[twoEls[1]];
-    if (!gameState.discovered.hasOwnProperty(newElement)){
-      $("#msg").html(`Congrats!  You discovered that ${getImg(twoEls[0])} and ${getImg(twoEls[1])} makes ${getImg(newElement)}`);
-      discoverNew(newElement); 
-    } else {
-      $("#msg").html(`You already discovered that ${getImg(twoEls[0])} and ${getImg(twoEls[1])} makes ${getImg(newElement)}`)
-    }
-  } else {
-    $("#msg").html(`Well ${getImg(twoEls[0])} and ${getImg(twoEls[1])} don't mix`);
-  }
+h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #00796b;
+  padding-bottom: 5px;
 }
-
-let mixItem = function(evt){
-  let elID = $(evt.currentTarget).attr("data-id");
-  if (gameState.mixing.length === 0){
-    gameState.mixing.push(elID);
-  } else {
-    //mixing has 1 element
-    gameState.mixing.push(elID);
-    makeMix();
-  }
-  return renderMix();
+#baseElements, #discoveredElements {
+  margin-top: 10px;
 }
-
-let renderDiscovered = function(){ 
-  let showItem = function(theItem){
-    return `<div class="item-box"><strong>${theItem.displayName}</strong><img class="icon" src="${theItem.imageURL}"><button class="mixme" data-id=${theItem.id}>Combine Me</button></div>`;
-  };
-  $("#count").html(`${Object.keys(gameState.discovered).length}/${Object.keys(gameState.universe).length} things`);
-  $("#discovered").html("");
-  $(".mixme").off("click");
-  let discoveredKeys = Object.keys(gameState.discovered);
-  discoveredKeys.map(elID=>{
-    let theItem = gameState.discovered[elID];
-    $("#discovered").append(showItem(theItem));
-  });
-  $(".mixme").on("click", mixItem);
+.element-btn {
+  background: #00796b;
+  border: none;
+  color: white;
+  padding: 8px;
+  margin: 5px 0;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.2s ease;
 }
-
-renderDiscovered();
+.element-btn:hover {
+  background: #004d40;
+}
+.draggable {
+  position: absolute;
+  background: #26a69a;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: grab;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  font-weight: 600;
+  user-select: none;
+  white-space: nowrap;
+}
+.draggable:active {
+  cursor: grabbing;
+  opacity: 0.85;
+}
