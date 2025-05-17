@@ -3,40 +3,24 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CS Alchemy</title>
-<link rel="stylesheet" href="style.css" />
+<title>Little Alchemy Clone</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header>
-    <h1>Computer Science Alchemy</h1>
-    <button id="toggle-desc">Toggle Descriptions</button>
+    <h1>Little Alchemy Clone</h1>
   </header>
-
-  <div id="container">
-    <!-- Left sidebar with discovered elements -->
-    <aside id="sidebar-elements">
+  <main>
+    <section id="elements-panel">
       <h2>Elements</h2>
-      <div id="elements-list"></div>
-    </aside>
-
-    <!-- Main workspace where you drag/drop -->
-    <main id="workspace" aria-label="Workspace">
+      <div id="elements-container"></div>
+    </section>
+    <section id="workspace">
       <h2>Workspace</h2>
-      <div id="workspace-area"></div>
-    </main>
+      <div id="workspace-container"></div>
+    </section>
+  </main>
 
-    <!-- Right sidebar for descriptions -->
-    <aside id="sidebar-desc" class="hidden">
-      <h2>Description</h2>
-      <div id="desc-content">
-        <p>Select an element to see its description here.</p>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Popup for new element discovered -->
-  <div id="popup" class="hidden"></div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
