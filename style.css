@@ -1,104 +1,48 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f0f0f0;
-  color: #333;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #ff8a00, #e52e71);
+    color: white;
 }
 
-header {
-  background-color: #4CAF50;
-  color: white;
-  padding: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#controls {
-  display: flex;
-  gap: 1em;
-  align-items: center;
-}
-
-#resetBtn {
-  padding: 0.5em 1em;
-  background-color: white;
-  color: #4CAF50;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#resetBtn:hover {
-  background-color: #e6e6e6;
-}
-
-main {
-  display: flex;
-  height: calc(100vh - 80px);
-}
-
-#workspace {
-  flex: 3;
-  background-color: #ffffff;
-  border-right: 2px solid #ccc;
-  position: relative;
-  overflow: hidden;
-}
-
-#inventory {
-  flex: 1;
-  background-color: #f9f9f9;
-  padding: 1em;
-  overflow-y: auto;
-}
-
-#inventory h2 {
-  margin-bottom: 1em;
+h1 {
+    animation: fadeIn 1.5s ease-in;
 }
 
 #elements {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .element {
-  width: 60px;
-  height: 60px;
-  background-color: #ddd;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  user-select: none;
-  text-align: center;
-  padding: 0.5em;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    cursor: grab;
+    transition: transform 0.3s ease;
 }
 
-.element:active {
-  cursor: grabbing;
+.element:hover {
+    transform: scale(1.1);
 }
 
-.workspace-element {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background-color: #ddd;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  user-select: none;
-  text-align: center;
-  padding: 0.5em;
+#workspace {
+    width: 350px;
+    height: 200px;
+    border: 3px dashed white;
+    margin: auto;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#discovered {
+    margin-top: 20px;
+    padding: 10px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
