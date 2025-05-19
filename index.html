@@ -1,87 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Little Alchemy Clone</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Alchemy Clone</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div class="header-container">
-      <h1>Little Alchemy Clone</h1>
-      <p class="subtitle">Combine elements to discover new ones!</p>
-      <div class="controls">
-        <button id="resetBtn" title="Reset your progress and start fresh">Reset Game</button>
-        <div id="counter" aria-live="polite" aria-atomic="true">Discovered: 0 / 100</div>
-      </div>
+    <h1>Little Alchemy Clone</h1>
+    <p>Drag elements into the workspace to combine them!</p>
+    
+    <div id="elements">
+        <div class="element" draggable="true" data-name="fire">🔥 Fire</div>
+        <div class="element" draggable="true" data-name="water">💧 Water</div>
+        <div class="element" draggable="true" data-name="earth">🌍 Earth</div>
+        <div class="element" draggable="true" data-name="air">🌬️ Air</div>
     </div>
-  </header>
 
-  <main>
-    <!-- Workspace Section -->
-    <section id="workspace-section" aria-label="Workspace to combine elements">
-      <h2>Workspace</h2>
-      <p class="instructions">
-        Drag elements here or click them in your inventory to add them.
-        Drag one element onto another to try combining!
-      </p>
-      <div id="workspace" aria-describedby="workspace-desc" tabindex="0">
-        <p id="workspace-desc" class="visually-hidden">
-          Workspace where you place elements to combine.
-          Use drag and drop or click elements from inventory.
-        </p>
-        <div class="workspace-placeholder">Add elements here to combine</div>
-      </div>
-    </section>
+    <div id="workspace" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <p>Drop elements here to combine</p>
+    </div>
 
-    <!-- Inventory Section -->
-    <aside id="inventory-section" aria-label="Your element inventory">
-      <h2>Inventory</h2>
+    <h2>Discovered Elements</h2>
+    <div id="discovered"></div>
 
-      <div class="search-container">
-        <label for="searchBox" class="visually-hidden">Search Elements</label>
-        <input
-          type="text"
-          id="searchBox"
-          placeholder="Search elements..."
-          aria-describedby="searchHelp"
-          autocomplete="off"
-        />
-        <small id="searchHelp">Type to filter elements by name.</small>
-      </div>
+    <button onclick="resetGame()">Reset Progress</button>
 
-      <div id="elements" class="inventory-grid" role="list" tabindex="0" aria-label="Available elements">
-        <!-- Sample starting elements -->
-        <button class="element" role="listitem" draggable="true" data-name="air" title="Air">Air</button>
-        <button class="element" role="listitem" draggable="true" data-name="earth" title="Earth">Earth</button>
-        <button class="element" role="listitem" draggable="true" data-name="fire" title="Fire">Fire</button>
-        <button class="element" role="listitem" draggable="true" data-name="water" title="Water">Water</button>
-
-        <!-- Some discovered elements example -->
-        <button class="element" role="listitem" draggable="true" data-name="steam" title="Steam">Steam</button>
-        <button class="element" role="listitem" draggable="true" data-name="lava" title="Lava">Lava</button>
-        <button class="element" role="listitem" draggable="true" data-name="mud" title="Mud">Mud</button>
-        <button class="element" role="listitem" draggable="true" data-name="dust" title="Dust">Dust</button>
-
-        <!-- More placeholders for gameplay expansion -->
-      </div>
-
-      <div class="scroll-actions">
-        <button id="scrollTopBtn" title="Scroll inventory to top">↑ Top</button>
-      </div>
-    </aside>
-  </main>
-
-  <footer>
-    <p>
-      Created by a passionate dev. Combine elements, discover new ones, and have fun! Reset anytime.
-    </p>
-    <p>
-      Inspired by the original Little Alchemy game.
-    </p>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
