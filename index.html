@@ -1,36 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Little Alchemy Clone</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <h1>Little Alchemy Clone</h1>
-    <p>Drag elements into the workspace to combine them!</p>
-
-    <div class="container">
-        <div id="sidebar">
-            <h2>Elements</h2>
-            <div id="elements">
-                <div class="element" draggable="true" data-name="fire">🔥 Fire</div>
-                <div class="element" draggable="true" data-name="water">💧 Water</div>
-                <div class="element" draggable="true" data-name="earth">🌍 Earth</div>
-                <div class="element" draggable="true" data-name="air">🌬️ Air</div>
-            </div>
+    
+    <div class="main-container">
+      <!-- Scrollable Sidebar with Base Elements -->
+      <div id="sidebar">
+        <h2>Base Elements</h2>
+        <div id="elements">
+          <div class="element" draggable="true" data-element="fire">
+            🔥 Fire
+          </div>
+          <div class="element" draggable="true" data-element="water">
+            💧 Water
+          </div>
+          <div class="element" draggable="true" data-element="earth">
+            🌍 Earth
+          </div>
+          <div class="element" draggable="true" data-element="air">
+            🌬️ Air
+          </div>
         </div>
+      </div>
 
-        <div id="workspace" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <p>Drop elements here to combine</p>
-        </div>
+      <!-- Workspace for dropping elements -->
+      <div
+        id="workspace"
+        ondragover="allowDrop(event)"
+        ondrop="handleDrop(event)"
+      >
+        <h2>Workspace</h2>
+        <p>Drop elements here to combine</p>
+      </div>
     </div>
 
-    <h2>Discovered Elements</h2>
-    <div id="discovered"></div>
+    <!-- Area for Discovered Elements -->
+    <div id="discovered-container">
+      <h2>Discovered Elements</h2>
+      <div id="discovered"></div>
+    </div>
 
-    <button onclick="resetGame()">Reset Progress</button>
+    <button id="resetBtn" onclick="resetGame()">Reset Game</button>
+    <div id="popup" class="popup"></div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
