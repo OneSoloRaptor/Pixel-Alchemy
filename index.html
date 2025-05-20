@@ -8,23 +8,27 @@
 </head>
 <body>
     <h1>Little Alchemy Clone</h1>
-    <p>Drag elements into the workspace to combine them!</p>
+    <p>Drag elements into the workspace or click two elements to combine!</p>
     
     <div id="elements">
-        <div class="element" draggable="true" data-name="fire">🔥 Fire</div>
-        <div class="element" draggable="true" data-name="water">💧 Water</div>
-        <div class="element" draggable="true" data-name="earth">🌍 Earth</div>
-        <div class="element" draggable="true" data-name="air">🌬️ Air</div>
+        <div class="element" draggable="true" data-name="fire" onclick="selectElement('fire')">🔥 Fire</div>
+        <div class="element" draggable="true" data-name="water" onclick="selectElement('water')">💧 Water</div>
+        <div class="element" draggable="true" data-name="earth" onclick="selectElement('earth')">🌍 Earth</div>
+        <div class="element" draggable="true" data-name="air" onclick="selectElement('air')">🌬️ Air</div>
     </div>
 
     <div id="workspace" ondrop="drop(event)" ondragover="allowDrop(event)">
         <p>Drop elements here to combine</p>
     </div>
 
+    <button onclick="combineSelected()">Combine Selected Elements</button>
+
     <h2>Discovered Elements</h2>
     <div id="discovered"></div>
 
     <button onclick="resetGame()">Reset Progress</button>
+
+    <div id="popup" class="popup"></div>
 
     <script src="script.js"></script>
 </body>
