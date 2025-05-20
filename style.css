@@ -1,4 +1,4 @@
-/* General Layout & Background */
+/* Basic resets and background */
 body {
   margin: 0;
   padding: 0;
@@ -12,7 +12,7 @@ h1 {
   margin-top: 20px;
 }
 
-/* Main container: Sidebar and Workspace */
+/* Container holds both sidebar and workspace horizontally */
 .main-container {
   display: flex;
   justify-content: center;
@@ -21,7 +21,7 @@ h1 {
   margin: 20px;
 }
 
-/* Sidebar styling (scrollable) */
+/* Sidebar with scroll for base elements */
 #sidebar {
   width: 200px;
   height: 400px;
@@ -37,7 +37,7 @@ h1 {
   gap: 10px;
 }
 
-/* Draggable Element styling */
+/* Draggable element styling */
 .element {
   background: rgba(255, 255, 255, 0.9);
   padding: 10px;
@@ -62,7 +62,6 @@ h1 {
   position: relative;
 }
 
-/* Each dropped item within the workspace */
 .workspace-item {
   margin: 5px;
   display: inline-block;
@@ -71,7 +70,7 @@ h1 {
   border-radius: 8px;
 }
 
-/* Discovered Elements area */
+/* Discovered elements area styling */
 #discovered-container {
   width: 80%;
   margin: 20px auto;
@@ -88,7 +87,7 @@ h1 {
   background: rgba(255, 255, 255, 0.95);
 }
 
-/* Reset Button styling */
+/* Reset button styling */
 button {
   padding: 10px 20px;
   background: #333;
@@ -103,7 +102,7 @@ button:hover {
   background: #555;
 }
 
-/* Popup styling */
+/* Popup notification styling */
 .popup {
   position: fixed;
   bottom: 20px;
