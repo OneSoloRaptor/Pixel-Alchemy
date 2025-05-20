@@ -1,13 +1,13 @@
-/* --------------------------
-   Little Alchemy Clone JS
--------------------------- */
+/* ===============================
+   Little Alchemy Clone Script
+=============================== */
 
-// Global arrays for items currently in the workspace and discovered elements.
-let workspaceElements = []; // Holds strings (the element names) dropped in workspace.
+// Global arrays to record dropped elements and discovered elements.
+let workspaceElements = [];  // Elements dropped into the workspace.
 let discoveredElements =
   JSON.parse(localStorage.getItem("discovered")) || [];
 
-// Combination recipes: the key is the sorted pair (joined by "+") in lowercase.
+// Combination recipes: keys are sorted and joined by '+' in lowercase.
 const combinations = {
   "air+earth": "Dust",
   "air+fire": "Smoke",
@@ -20,100 +20,97 @@ const combinations = {
   "steam+air": "Cloud"
 };
 
-/* --- Initialization Functions --- */
-/* Initialize discovered elements from previous sessions */
+/* ---- Initialization ---- */
+
+// Attach drag event listeners for base elements and discovered elements.
+function initDraggables() {
+  const baseElements = document.querySelectorAll("#elements .element");
+  baseElements.forEach((item) => {
+    item.addEventListener("dragstart", dragStart);
+  });
+}
+
+// Initialize discovered elements from localStorage.
 function initDiscovered() {
   const discoveredDiv = document.getElementById("discovered");
   discoveredDiv.innerHTML = "";
   discoveredElements.forEach((el) => {
-    let newNode = document.createElement("div");
-    newNode.className = "element";
-    newNode.dataset.element = el;
-    newNode.textContent = el;
-    newNode.draggable = true;
-    newNode.addEventListener("dragstart", dragStart);
-    discoveredDiv.appendChild(newNode);
+    let div = document.createElement("div");
+    div.className = "element";
+    div.textContent = el;
+    div.dataset.element = el;
+    div.setAttribute("draggable", "true");
+    div.addEventListener("dragstart", dragStart);
+    discoveredDiv.appendChild(div);
   });
 }
 
-/* Save discovered elements to localStorage */
-function saveDiscovered() {
-  localStorage.setItem("discovered", JSON.stringify(discoveredElements));
-}
-
-/* Initialize drag events for base elements in the sidebar */
-function initDraggables() {
-  let elems = document.querySelectorAll("#elements .element");
-  elems.forEach((el) => {
-    el.addEventListener("dragstart", dragStart);
-  });
-}
-
-/* When the page loads, initialize everything */
+/* On DOM ready, initialize everything */
 document.addEventListener("DOMContentLoaded", () => {
   initDraggables();
   initDiscovered();
   renderWorkspace();
 });
 
-/* --- Drag and Drop Handlers --- */
+/* ---- Drag and Drop Handlers ---- */
 
-/* Allow drop by preventing default */
+// Allows dropping by preventing the default behavior.
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
-/* Set data when drag starts */
+// Fix: Use "text/plain" as the data type for reliability.
 function dragStart(ev) {
-  ev.dataTransfer.setData("text", ev.target.dataset.element);
+  // Set the dragged data to the element name (from data-element attribute)
+  ev.dataTransfer.setData("text/plain", ev.target.dataset.element);
 }
 
-/* When an element is dropped in the workspace */
+// Handle drop event in the workspace.
 function handleDrop(ev) {
   ev.preventDefault();
-  let data = ev.dataTransfer.getData("text");
+  let data = ev.dataTransfer.getData("text/plain");
   if (data) {
-    // Add the dropped element’s name into workspaceElements.
+    // Push the dropped element into workspaceElements and update view.
     workspaceElements.push(data);
     renderWorkspace();
-    // Attempt to auto-combine any valid pairs.
+    // Try auto-combining if a valid combination exists.
     tryAutoCombine();
   }
 }
 
-/* --- Workspace Rendering and Auto-Combination --- */
+/* ---- Workspace Rendering & Auto-Combination ---- */
 
-/* Render the workspace by clearing and then re‑creating DOM items */
+// Render the workspace by listing all dropped elements.
 function renderWorkspace() {
-  let ws = document.getElementById("workspace");
-  ws.innerHTML = "<h2>Workspace</h2><p>Drop elements here to combine</p>";
+  const workspaceDiv = document.getElementById("workspace");
+  workspaceDiv.innerHTML =
+    "<h2>Workspace</h2><p>Drop elements here to combine</p>";
   workspaceElements.forEach((item) => {
     let div = document.createElement("div");
     div.className = "workspace-item";
     div.textContent = item;
-    ws.appendChild(div);
+    workspaceDiv.appendChild(div);
   });
 }
 
-/* Check all pairs in workspaceElements for a valid combination */
+// Iterate over pairs of workspace elements to auto-combine recipes.
 function tryAutoCombine() {
-  if (workspaceElements.length < 2) return; // Need at least 2 to combine.
-  // Loop over each pair (i, j):
+  if (workspaceElements.length < 2) return; // Need at least 2 elements.
   for (let i = 0; i < workspaceElements.length; i++) {
     for (let j = i + 1; j < workspaceElements.length; j++) {
       let pair = [workspaceElements[i], workspaceElements[j]];
       let combo = checkCombination(pair);
       if (combo) {
-        // Remove the two elements (remove the element with highest index first).
+        // Remove the two ingredients (remove the one with higher index first)
         workspaceElements.splice(j, 1);
         workspaceElements.splice(i, 1);
-        // Add the new combined element.
+        // Add the new element to discovered list.
         addNewElement(combo);
         showPopup("Created: " + combo);
-        // Optionally, add the combo back into the workspace for additional chaining.
+        // Also, for chaining, add the new combo into the workspace.
         workspaceElements.push(combo);
         renderWorkspace();
-        // Recursively check for further combination possibilities.
+        // Recursively check for further combinations.
         tryAutoCombine();
         return;
       }
@@ -121,36 +118,36 @@ function tryAutoCombine() {
   }
 }
 
-/* Check if the sorted pair (joined with '+') exists in our recipes */
+// Check if the sorted elements in a given array (joined by '+') match a recipe.
 function checkCombination(arr) {
   let key = arr.slice().sort().join("+").toLowerCase();
   return combinations[key] || null;
 }
 
-/* --- Discovered Elements Handling --- */
+/* ---- Discovered Elements Handling ---- */
 
-/* Add a new element to the discovered list if not already present */
+// If a new element is created, add it to the discovered list and sidebar.
 function addNewElement(element) {
   if (!discoveredElements.includes(element)) {
     discoveredElements.push(element);
-    saveDiscovered();
-    // Append to discovered panel and make it draggable.
-    let discoveredDiv = document.getElementById("discovered");
-    let newDiv = document.createElement("div");
-    newDiv.className = "element";
-    newDiv.textContent = element;
-    newDiv.dataset.element = element;
-    newDiv.draggable = true;
-    newDiv.addEventListener("dragstart", dragStart);
-    discoveredDiv.appendChild(newDiv);
+    localStorage.setItem("discovered", JSON.stringify(discoveredElements));
+    // Add it to the Discovered Elements panel with drag support.
+    const discoveredDiv = document.getElementById("discovered");
+    let div = document.createElement("div");
+    div.className = "element";
+    div.textContent = element;
+    div.dataset.element = element;
+    div.setAttribute("draggable", "true");
+    div.addEventListener("dragstart", dragStart);
+    discoveredDiv.appendChild(div);
   }
 }
 
-/* --- Utility Functions --- */
+/* ---- Utility Functions ---- */
 
-/* Show a temporary popup notification */
+// Show a temporary popup with a message.
 function showPopup(message) {
-  let popup = document.getElementById("popup");
+  const popup = document.getElementById("popup");
   popup.textContent = message;
   popup.style.display = "block";
   setTimeout(() => {
@@ -158,7 +155,7 @@ function showPopup(message) {
   }, 2000);
 }
 
-/* Reset the game (workspace and discovered elements) */
+// Reset the game by clearing workspace and discovered elements.
 function resetGame() {
   workspaceElements = [];
   discoveredElements = [];
