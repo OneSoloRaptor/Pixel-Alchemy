@@ -2,56 +2,62 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Little Alchemy Clone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pixel Alchemy</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Little Alchemy Clone</h1>
-    
+    <h1>Pixel Alchemy</h1>
+
     <div class="main-container">
-      <!-- Scrollable sidebar with base elements -->
-      <div id="sidebar">
+      <!-- Sidebar with base elements -->
+      <aside id="sidebar">
         <h2>Base Elements</h2>
-        <div id="elements">
-          <div class="element" draggable="true" data-element="fire">
-            🔥 Fire
+        <div id="elements" class="element-list">
+          <!-- Base elements are visually blocks -->
+          <div class="element" draggable="true" data-element="Fire">
+            <span class="emoji">🔥</span>
+            <span class="label">Fire</span>
           </div>
-          <div class="element" draggable="true" data-element="water">
-            💧 Water
+          <div class="element" draggable="true" data-element="Water">
+            <span class="emoji">💧</span>
+            <span class="label">Water</span>
           </div>
-          <div class="element" draggable="true" data-element="earth">
-            🌍 Earth
+          <div class="element" draggable="true" data-element="Earth">
+            <span class="emoji">🌍</span>
+            <span class="label">Earth</span>
           </div>
-          <div class="element" draggable="true" data-element="air">
-            🌬️ Air
+          <div class="element" draggable="true" data-element="Air">
+            <span class="emoji">🌬️</span>
+            <span class="label">Air</span>
           </div>
         </div>
-      </div>
+      </aside>
 
-      <!-- Workspace where elements are dropped and combined -->
-      <div
-        id="workspace"
-        ondragover="allowDrop(event)"
-        ondrop="handleDrop(event)"
-      >
+      <!-- Workspace for combining elements -->
+      <main id="workspace-area">
         <h2>Workspace</h2>
-        <p>Drop elements here to combine</p>
-      </div>
+        <div id="workspace"
+             class="workspace"
+             ondragover="allowDrop(event)"
+             ondrop="handleDrop(event)">
+          <p class="workspace-hint">Drag elements here to combine</p>
+        </div>
+      </main>
+
+      <!-- Discovered elements panel -->
+      <aside id="discovered-container">
+        <h2>Discovered Elements</h2>
+        <div id="discovered" class="element-list"></div>
+      </aside>
     </div>
 
-    <!-- Area for discovered elements -->
-    <div id="discovered-container">
-      <h2>Discovered Elements</h2>
-      <div id="discovered"></div>
+    <div class="controls">
+      <button id="resetBtn" onclick="resetGame()">Reset Game</button>
     </div>
-
-    <button id="resetBtn" onclick="resetGame()">Reset Game</button>
     <div id="popup" class="popup"></div>
 
-    <script src="script.js"></script>
+    <!-- Main game logic -->
+    <script src="game.js"></script>
   </body>
 </html>
