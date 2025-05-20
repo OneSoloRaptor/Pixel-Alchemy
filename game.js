@@ -5,17 +5,10 @@ const combinations = {
     "air+water": "Rain",
     "fire+air": "Smoke",
     "air+earth": "Dust",
-    "fire+mud": "Brick",
-    "water+air": "Mist",
-    "mud+fire": "Clay",
-    "earth+rain": "Plant",
-    "fire+steam": "Engine",
-    "mud+brick": "House",
-    "air+fire": "Explosion"
+    "fire+mud": "Brick"
 };
 
 let discoveredElements = JSON.parse(localStorage.getItem("discovered")) || [];
-let selectedElements = [];
 
 function allowDrop(event) {
     event.preventDefault();
@@ -32,37 +25,12 @@ function drop(event) {
     let newElement = checkCombination(existingElements);
     if (newElement) {
         addNewElement(newElement);
-        showPopup(`Created: ${newElement}`);
-    }
-}
-
-function selectElement(name) {
-    if (selectedElements.includes(name)) {
-        selectedElements = selectedElements.filter(e => e !== name);
     } else {
-        selectedElements.push(name);
-    }
-    updateSelectionUI();
-}
-
-function updateSelectionUI() {
-    document.querySelectorAll(".element").forEach(el => {
-        el.classList.remove("selected");
-        if (selectedElements.includes(el.dataset.name)) {
-            el.classList.add("selected");
-        }
-    });
-}
-
-function combineSelected() {
-    if (selectedElements.length === 2) {
-        let newElement = checkCombination(selectedElements);
-        if (newElement) {
-            addNewElement(newElement);
-            showPopup(`Created: ${newElement}`);
-        }
-        selectedElements = [];
-        updateSelectionUI();
+        let div = document.createElement("div");
+        div.className = "element";
+        div.textContent = data;
+        div.dataset.name = data;
+        workspace.appendChild(div);
     }
 }
 
@@ -75,7 +43,6 @@ function addNewElement(name) {
         div.className = "element";
         div.textContent = name;
         div.dataset.name = name;
-        div.onclick = () => selectElement(name);
         document.getElementById("discovered").appendChild(div);
     }
 }
@@ -91,28 +58,10 @@ function resetGame() {
     document.getElementById("discovered").innerHTML = "";
 }
 
-function showPopup(message) {
-    const popup = document.getElementById("popup");
-    popup.textContent = message;
-    popup.style.display = "block";
-    setTimeout(() => {
-        popup.style.display = "none";
-    }, 2000);
-}
-
 function initializeDragAndDrop() {
     document.querySelectorAll(".element").forEach(el => {
         el.addEventListener("dragstart", event => {
             event.dataTransfer.setData("text", event.target.dataset.name);
-        });
-
-        el.addEventListener("dragend", event => {
-            event.target.style.opacity = "1";
-        });
-
-        el.addEventListener("dragover", event => {
-            event.preventDefault();
-            event.target.style.opacity = "0.6";
         });
     });
 }
