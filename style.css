@@ -18,7 +18,7 @@ h1 {
 
 .element {
     padding: 12px;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
     cursor: grab;
     transition: transform 0.3s ease;
@@ -26,6 +26,11 @@ h1 {
 
 .element:hover {
     transform: scale(1.1);
+    background: rgba(255, 255, 255, 1);
+}
+
+.selected {
+    background: yellow !important;
 }
 
 #workspace {
@@ -34,12 +39,29 @@ h1 {
     border: 3px dashed white;
     margin: auto;
     padding: 10px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
+    position: relative;
 }
 
 #discovered {
     margin-top: 20px;
     padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    display: none;
 }
 
 @keyframes fadeIn {
