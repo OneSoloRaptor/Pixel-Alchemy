@@ -1,8 +1,7 @@
-// ===== Pixel Alchemy Game Logic =====
+// ===== Pixel Alchemy: APCSA Edition =====
 
-// --- Element Recipes (add more as you like) ---
+// --- Element Recipes (APCSA concepts) ---
 const COMBINATIONS = {
-  // Tier 1 (Basic): Available from the start
   "conditional": { name: "Conditional", emoji: "🔀" },
   "method": { name: "Method", emoji: "🔧" },
   "variable": { name: "Variable", emoji: "📦" },
@@ -10,7 +9,6 @@ const COMBINATIONS = {
   "loop": { name: "Loop", emoji: "🔁" },
   "class": { name: "Class", emoji: "🏛️" },
 
-  // Tier 2 (Combinations)
   "class+method": { name: "Constructor", emoji: "🏗️" },
   "variable+loop": { name: "Counter", emoji: "🔢" },
   "method+variable": { name: "Parameter", emoji: "🔣" },
@@ -23,7 +21,6 @@ const COMBINATIONS = {
   "object+variable": { name: "Accessing", emoji: "📬" },
   "object+class": { name: "Inheritance", emoji: "🧬" },
 
-  // Tier 3 (Combinations of Tier 2)
   "while loop+counter": { name: "For Loop", emoji: "⏩" },
   "class+subclass": { name: "Polymorphism", emoji: "🌀" },
   "constructor+object": { name: "Instance", emoji: "🪄" },
@@ -33,8 +30,6 @@ const COMBINATIONS = {
   "call+boolean": { name: "If Statement", emoji: "❓" }
 };
 
-
-// --- Base Elements (must match the sidebar HTML) ---
 const BASE_ELEMENTS = [
   { name: "Conditional", emoji: "🔀" },
   { name: "Method", emoji: "🔧" },
@@ -47,124 +42,155 @@ const BASE_ELEMENTS = [
 // --- State ---
 let workspaceElements = []; // {name, emoji, x, y, id}
 let discoveredElements = JSON.parse(localStorage.getItem("discovered") || "[]"); // {name, emoji}
-let draggingElem = null, offsetX = 0, offsetY = 0;
+let draggingElem = null, dragOffset = {x:0, y:0}, dragStartPos = {x:0, y:0};
 
 // --- Helpers ---
-function getWorkspaceRect() {
-  return document.getElementById("workspace").getBoundingClientRect();
-}
-function getElemById(id) {
-  return workspaceElements.find(e => e.id === id);
-}
 function makeId() {
   return Math.random().toString(36).substr(2, 8);
 }
 function comboKey(a, b) {
   return [a.toLowerCase(), b.toLowerCase()].sort().join("+");
 }
+function getElemById(id) {
+  return workspaceElements.find(e => e.id === id);
+}
+function getWorkspaceRect() {
+  return document.getElementById("workspace").getBoundingClientRect();
+}
 
 // --- Rendering ---
+function renderSidebarElements() {
+  const elList = document.getElementById("elements");
+  elList.innerHTML = "";
+  BASE_ELEMENTS.forEach(({name, emoji}) => {
+    const div = document.createElement("div");
+    div.className = "element";
+    div.draggable = false;
+    div.dataset.element = name;
+    div.innerHTML = `<span class="emoji">${emoji}</span><span class="label">${name}</span>`;
+    div.addEventListener("mousedown", sidebarMouseDown);
+    elList.appendChild(div);
+  });
+}
 function renderDiscovered() {
-  const container = document.getElementById("discovered");
-  container.innerHTML = "";
+  const discoveredList = document.getElementById("discovered");
+  discoveredList.innerHTML = "";
   discoveredElements.forEach(({name, emoji}) => {
     const div = document.createElement("div");
     div.className = "element";
-    div.draggable = true;
+    div.draggable = false;
     div.dataset.element = name;
     div.innerHTML = `<span class="emoji">${emoji}</span><span class="label">${name}</span>`;
-    div.addEventListener("dragstart", dragStartSidebar);
-    container.appendChild(div);
+    div.addEventListener("mousedown", sidebarMouseDown);
+    discoveredList.appendChild(div);
   });
 }
-
 function renderWorkspace() {
   const ws = document.getElementById("workspace");
-  ws.innerHTML = "";
+  // Remove all blocks except workspace hint
+  ws.querySelectorAll(".workspace-block").forEach(e=>e.remove());
   workspaceElements.forEach(item => {
     const div = document.createElement("div");
-    div.className = "workspace-item";
+    div.className = "workspace-block";
     div.style.left = (item.x || 30) + "px";
     div.style.top = (item.y || 40) + "px";
     div.innerHTML = `<span class="emoji">${item.emoji}</span><span class="label">${item.name}</span>`;
     div.dataset.id = item.id;
-    // Drag within workspace
-    div.onmousedown = workspaceMouseDown;
+    div.addEventListener("mousedown", workspaceBlockMouseDown);
     ws.appendChild(div);
   });
-  // Add hint if empty
-  if (workspaceElements.length === 0) {
-    const p = document.createElement("p");
-    p.className = "workspace-hint";
-    p.textContent = "Drag elements here to combine";
-    ws.appendChild(p);
-  }
+  // Show/hide hint
+  const hint = document.getElementById("workspaceHint");
+  hint.style.display = workspaceElements.length === 0 ? "block" : "none";
 }
 
-// --- Drag from sidebar or discovered ---
-function dragStartSidebar(e) {
-  e.dataTransfer.setData("element", e.target.dataset.element);
-}
-
-// --- Workspace Drop ---
-function allowDrop(e) {
-  e.preventDefault();
-}
-function handleDrop(e) {
-  e.preventDefault();
-  const elementName = e.dataTransfer.getData("element");
-  if (!elementName) return;
-  // Element data
+// --- Sidebar drag (clone to workspace) ---
+function sidebarMouseDown(e) {
+  const elementName = e.currentTarget.dataset.element;
+  // Find element object
   let elemObj = BASE_ELEMENTS.find(el => el.name === elementName) ||
                 discoveredElements.find(el => el.name === elementName);
   if (!elemObj) return;
-  // Place at drop location (relative to workspace)
-  const wsRect = getWorkspaceRect();
-  const x = e.clientX - wsRect.left - 40;
-  const y = e.clientY - wsRect.top - 40;
-  const id = makeId();
-  workspaceElements.push({ ...elemObj, x, y, id });
-  renderWorkspace();
-  setTimeout(checkCombinations, 100); // Wait for DOM update
-}
 
-// --- Drag within workspace (movable blocks!) ---
-function workspaceMouseDown(e) {
-  const div = e.currentTarget;
-  draggingElem = div;
-  const rect = div.getBoundingClientRect();
-  const wsRect = getWorkspaceRect();
-  offsetX = e.clientX - rect.left;
-  offsetY = e.clientY - rect.top;
-  document.onmousemove = workspaceMouseMove;
-  document.onmouseup = workspaceMouseUp;
-  div.style.zIndex = 1000;
+  // Get workspace position for drop
+  const ws = document.getElementById("workspace");
+  const wsRect = ws.getBoundingClientRect();
+
+  // Start where mouse is relative to workspace
+  const mouseMoveHandler = (me) => {
+    let x = me.clientX - wsRect.left - 40;
+    let y = me.clientY - wsRect.top - 40;
+    dragGhost.style.left = x + "px";
+    dragGhost.style.top = y + "px";
+  };
+  // Create a ghost block
+  const dragGhost = document.createElement("div");
+  dragGhost.className = "workspace-block dragging";
+  dragGhost.style.position = "absolute";
+  dragGhost.innerHTML = `<span class="emoji">${elemObj.emoji}</span><span class="label">${elemObj.name}</span>`;
+  dragGhost.style.pointerEvents = "none";
+  ws.appendChild(dragGhost);
+
+  // Track mouse for drag
+  function mousemove(e2) { mouseMoveHandler(e2); }
+  function mouseup(e2) {
+    document.removeEventListener("mousemove", mousemove);
+    document.removeEventListener("mouseup", mouseup);
+    dragGhost.remove();
+    let x = e2.clientX - wsRect.left - 40;
+    let y = e2.clientY - wsRect.top - 40;
+    // Only place if inside workspace
+    if (x >= 0 && y >= 0 && x <= wsRect.width-80 && y <= wsRect.height-80) {
+      workspaceElements.push({ ...elemObj, x, y, id: makeId() });
+      renderWorkspace();
+      setTimeout(checkCombinations, 100);
+    }
+  }
+  document.addEventListener("mousemove", mousemove);
+  document.addEventListener("mouseup", mouseup);
 }
-function workspaceMouseMove(e) {
-  if (!draggingElem) return;
-  const wsRect = getWorkspaceRect();
-  let x = e.clientX - wsRect.left - offsetX;
-  let y = e.clientY - wsRect.top - offsetY;
-  // Clamp to workspace
-  x = Math.max(0, Math.min(x, wsRect.width - 80));
-  y = Math.max(0, Math.min(y, wsRect.height - 80));
-  draggingElem.style.left = x + "px";
-  draggingElem.style.top = y + "px";
-}
-function workspaceMouseUp(e) {
-  if (!draggingElem) return;
-  // Update state with new position
-  const id = draggingElem.dataset.id;
-  const wsRect = getWorkspaceRect();
-  let x = parseInt(draggingElem.style.left);
-  let y = parseInt(draggingElem.style.top);
-  let elem = getElemById(id);
-  if (elem) { elem.x = x; elem.y = y; }
-  draggingElem.style.zIndex = 1;
-  draggingElem = null;
-  document.onmousemove = null;
-  document.onmouseup = null;
-  setTimeout(checkCombinations, 100);
+// --- Workspace block drag (move or merge) ---
+function workspaceBlockMouseDown(e) {
+  const blockDiv = e.currentTarget;
+  const ws = document.getElementById("workspace");
+  const wsRect = ws.getBoundingClientRect();
+  const id = blockDiv.dataset.id;
+  const block = getElemById(id);
+
+  draggingElem = blockDiv;
+  draggingElem.classList.add("dragging");
+  dragStartPos = { x: block.x, y: block.y };
+  dragOffset = {
+    x: e.clientX - wsRect.left - block.x,
+    y: e.clientY - wsRect.top - block.y
+  };
+
+  function mousemove(ev) {
+    let x = ev.clientX - wsRect.left - dragOffset.x;
+    let y = ev.clientY - wsRect.top - dragOffset.y;
+    // Clamp
+    x = Math.max(0, Math.min(x, wsRect.width - 80));
+    y = Math.max(0, Math.min(y, wsRect.height - 80));
+    draggingElem.style.left = x + "px";
+    draggingElem.style.top = y + "px";
+  }
+  function mouseup(ev) {
+    document.removeEventListener("mousemove", mousemove);
+    document.removeEventListener("mouseup", mouseup);
+    draggingElem.classList.remove("dragging");
+    // Update block position
+    let x = ev.clientX - wsRect.left - dragOffset.x;
+    let y = ev.clientY - wsRect.top - dragOffset.y;
+    x = Math.max(0, Math.min(x, wsRect.width - 80));
+    y = Math.max(0, Math.min(y, wsRect.height - 80));
+    block.x = x; block.y = y;
+    draggingElem.style.left = x + "px";
+    draggingElem.style.top = y + "px";
+    draggingElem = null;
+    setTimeout(checkCombinations, 120);
+  }
+  document.addEventListener("mousemove", mousemove);
+  document.addEventListener("mouseup", mouseup);
 }
 
 // --- Combination Logic: check for overlapping blocks ---
@@ -172,11 +198,13 @@ function checkCombinations() {
   if (workspaceElements.length < 2) return;
   for (let i = 0; i < workspaceElements.length; i++) {
     const a = workspaceElements[i];
-    const aDiv = document.querySelector(`.workspace-item[data-id="${a.id}"]`);
+    const aDiv = document.querySelector(`.workspace-block[data-id="${a.id}"]`);
+    if (!aDiv) continue;
     const aRect = aDiv.getBoundingClientRect();
     for (let j = i + 1; j < workspaceElements.length; j++) {
       const b = workspaceElements[j];
-      const bDiv = document.querySelector(`.workspace-item[data-id="${b.id}"]`);
+      const bDiv = document.querySelector(`.workspace-block[data-id="${b.id}"]`);
+      if (!bDiv) continue;
       const bRect = bDiv.getBoundingClientRect();
       if (isOverlap(aRect, bRect)) {
         const combo = COMBINATIONS[comboKey(a.name, b.name)];
@@ -184,8 +212,8 @@ function checkCombinations() {
           // Remove both, add new
           workspaceElements = workspaceElements.filter(e => e.id !== a.id && e.id !== b.id);
           // Place new at merged location
-          const newX = (a.x + b.x)/2;
-          const newY = (a.y + b.y)/2;
+          const newX = (a.x + b.x) / 2;
+          const newY = (a.y + b.y) / 2;
           const newItem = { ...combo, x: newX, y: newY, id: makeId() };
           workspaceElements.push(newItem);
           addDiscovered(combo);
@@ -203,7 +231,6 @@ function isOverlap(r1, r2) {
   return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
 }
 
-// --- Add to discovered panel ---
 function addDiscovered({name, emoji}) {
   if (!discoveredElements.find(e => e.name === name)) {
     discoveredElements.push({name, emoji});
@@ -212,15 +239,13 @@ function addDiscovered({name, emoji}) {
   }
 }
 
-// --- Popup ---
 function showPopup(msg) {
   const pop = document.getElementById("popup");
   pop.textContent = msg;
-  pop.style.display = "block";
-  setTimeout(() => { pop.style.display = "none"; }, 1800);
+  pop.classList.add("show");
+  setTimeout(() => { pop.classList.remove("show"); }, 1700);
 }
 
-// --- Reset ---
 function resetGame() {
   workspaceElements = [];
   discoveredElements = [];
@@ -230,28 +255,10 @@ function resetGame() {
   showPopup("Game Reset!");
 }
 
-// --- Init ---
-function initBaseElements() {
-  // Already in HTML, just attach drag events
-  document.querySelectorAll("#elements .element").forEach(div => {
-    div.addEventListener("dragstart", dragStartSidebar);
-  });
-}
-function initDiscovered() {
-  renderDiscovered();
-}
-function renderAll() {
-  renderWorkspace();
-  renderDiscovered();
-}
-
 // --- Main ---
 window.addEventListener("DOMContentLoaded", () => {
-  initBaseElements();
-  initDiscovered();
+  renderSidebarElements();
+  renderDiscovered();
   renderWorkspace();
-  // Workspace events
-  const ws = document.getElementById("workspace");
-  ws.addEventListener("dragover", allowDrop);
-  ws.addEventListener("drop", handleDrop);
+  document.getElementById("resetBtn").onclick = resetGame;
 });
