@@ -2,23 +2,46 @@
 
 // --- Element Recipes (add more as you like) ---
 const COMBINATIONS = {
-  "air+earth": { name: "Dust", emoji: "🌫️" },
-  "air+fire": { name: "Smoke", emoji: "💨" },
-  "air+water": { name: "Rain", emoji: "🌧️" },
-  "earth+fire": { name: "Lava", emoji: "🌋" },
-  "earth+water": { name: "Mud", emoji: "🪨" },
-  "fire+water": { name: "Steam", emoji: "🌫️" },
-  "fire+mud": { name: "Brick", emoji: "🧱" },
-  "lava+water": { name: "Obsidian", emoji: "🪨" },
-  "steam+air": { name: "Cloud", emoji: "☁️" }
+  // Tier 1 (Basic): Available from the start
+  "conditional": { name: "Conditional", emoji: "🔀" },
+  "method": { name: "Method", emoji: "🔧" },
+  "variable": { name: "Variable", emoji: "📦" },
+  "object": { name: "Object", emoji: "🧱" },
+  "loop": { name: "Loop", emoji: "🔁" },
+  "class": { name: "Class", emoji: "🏛️" },
+
+  // Tier 2 (Combinations)
+  "class+method": { name: "Constructor", emoji: "🏗️" },
+  "variable+loop": { name: "Counter", emoji: "🔢" },
+  "method+variable": { name: "Parameter", emoji: "🔣" },
+  "method+method": { name: "Override", emoji: "🔄" },
+  "object+method": { name: "Call", emoji: "📞" },
+  "class+class": { name: "Subclass", emoji: "🧬" },
+  "loop+conditional": { name: "While Loop", emoji: "🔂" },
+  "class+variable": { name: "Instance Variable", emoji: "📍" },
+  "conditional+variable": { name: "Boolean", emoji: "🔘" },
+  "object+variable": { name: "Accessing", emoji: "📬" },
+  "object+class": { name: "Inheritance", emoji: "🧬" },
+
+  // Tier 3 (Combinations of Tier 2)
+  "while loop+counter": { name: "For Loop", emoji: "⏩" },
+  "class+subclass": { name: "Polymorphism", emoji: "🌀" },
+  "constructor+object": { name: "Instance", emoji: "🪄" },
+  "call+variable": { name: "Return", emoji: "↩️" },
+  "method+parameter": { name: "Signature", emoji: "✍️" },
+  "signature+constructor": { name: "Overloading", emoji: "➕" },
+  "call+boolean": { name: "If Statement", emoji: "❓" }
 };
+
 
 // --- Base Elements (must match the sidebar HTML) ---
 const BASE_ELEMENTS = [
-  { name: "Fire", emoji: "🔥" },
-  { name: "Water", emoji: "💧" },
-  { name: "Earth", emoji: "🌍" },
-  { name: "Air", emoji: "🌬️" }
+  { name: "Conditional", emoji: "🔀" },
+  { name: "Method", emoji: "🔧" },
+  { name: "Variable", emoji: "📦" },
+  { name: "Object", emoji: "🧱" },
+  { name: "Loop", emoji: "🔁" },
+  { name: "Class", emoji: "🏛️" }
 ];
 
 // --- State ---
