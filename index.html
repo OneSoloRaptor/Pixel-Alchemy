@@ -5,16 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Pixel Alchemy</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Minimal clean fallback for quick preview */
+      body {
+        margin: 0;
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        background: #181A1B;
+        color: #E6E6E6;
+      }
+      header {
+        padding: 32px 0 20px 32px;
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        background: #181A1B;
+        box-shadow: 0 2px 10px #0002;
+      }
+      .container {
+        display: flex;
+        height: calc(100vh - 72px);
+        overflow: hidden;
+      }
+      .workspace {
+        flex: 1;
+        background: #232526;
+        margin: 0;
+        position: relative;
+        overflow: auto;
+        border-radius: 18px;
+        margin: 24px;
+        box-shadow: 0 8px 24px #0004;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-width: 0;
+      }
+      .workspace-hint {
+        color: #999;
+        font-size: 1.1rem;
+        margin-top: 40px;
+      }
+      .sidebar {
+        width: 340px;
+        background: #202225;
+        border-left: 2px solid #232526;
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 0 0;
+        height: 100%;
+      }
+      .sidebar-header {
+        font-size: 1.12rem;
+        font-weight: 700;
+        background: #232526;
+        padding: 20px 26px 12px;
+        margin-bottom: 0;
+        border-bottom: 1px solid #232526;
+      }
+      .element-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 18px 26px 24px 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .element {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #282A2E;
+        border-radius: 12px;
+        padding: 10px 18px;
+        user-select: none;
+        cursor: grab;
+        font-size: 1.15rem;
+        box-shadow: 0 2px 8px #0001;
+        transition: background 0.18s;
+      }
+      .element:active {
+        background: #313337;
+      }
+      .emoji {
+        font-size: 1.45rem;
+      }
+      .controls {
+        position: fixed;
+        left: 24px;
+        bottom: 32px;
+        z-index: 100;
+      }
+      .controls button {
+        padding: 11px 28px;
+        border-radius: 8px;
+        border: none;
+        background: #333;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px #0003;
+        transition: background 0.18s;
+      }
+      .controls button:hover {
+        background: #444;
+      }
+      .popup {
+        position: fixed;
+        left: 50%;
+        top: 8%;
+        transform: translateX(-50%);
+        background: #2b2d31;
+        color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 8px 32px #0007;
+        padding: 22px 38px;
+        font-size: 1.1rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        z-index: 200;
+      }
+      .popup.show {
+        opacity: 1;
+      }
+      @media (max-width: 900px) {
+        .sidebar { width: 220px; }
+        .container { flex-direction: column-reverse; }
+        .workspace { min-height: 340px; }
+      }
+    </style>
   </head>
   <body>
-    <h1>Pixel Alchemy</h1>
-
-    <div class="main-container">
-      <!-- Sidebar with base elements -->
-      <aside id="sidebar">
-        <h2>Base Elements</h2>
+    <header>Pixel Alchemy</header>
+    <div class="container">
+      <main class="workspace" id="workspace"
+        ondragover="allowDrop(event)"
+        ondrop="handleDrop(event)"
+        tabindex="0"
+      >
+        <div class="workspace-hint" id="workspaceHint">Drag elements here to combine</div>
+        <!-- Dropped elements will appear here -->
+      </main>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">Elements</div>
         <div id="elements" class="element-list">
-          <!-- Base elements are visually blocks -->
+          <!-- Base/discovered elements will be injected here by JS -->
           <div class="element" draggable="true" data-element="Fire">
             <span class="emoji">🔥</span>
             <span class="label">Fire</span>
@@ -31,33 +169,14 @@
             <span class="emoji">🌬️</span>
             <span class="label">Air</span>
           </div>
+          <!-- JS should append discovered elements here, too -->
         </div>
-      </aside>
-
-      <!-- Workspace for combining elements -->
-      <main id="workspace-area">
-        <h2>Workspace</h2>
-        <div id="workspace"
-             class="workspace"
-             ondragover="allowDrop(event)"
-             ondrop="handleDrop(event)">
-          <p class="workspace-hint">Drag elements here to combine</p>
-        </div>
-      </main>
-
-      <!-- Discovered elements panel -->
-      <aside id="discovered-container">
-        <h2>Discovered Elements</h2>
-        <div id="discovered" class="element-list"></div>
       </aside>
     </div>
-
     <div class="controls">
       <button id="resetBtn" onclick="resetGame()">Reset Game</button>
     </div>
     <div id="popup" class="popup"></div>
-
-    <!-- Main game logic -->
     <script src="game.js"></script>
   </body>
 </html>
