@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pixel Alchemy - APCSA</title>
+  <title>Pixel Alchemy – APCSA Edition</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>Pixel Alchemy – APCSA Edition</header>
   <div class="container">
+    <!-- Workspace: where elements are dragged and merged -->
     <main class="workspace" id="workspace" tabindex="0">
       <div class="workspace-hint" id="workspaceHint">Drag elements here to combine</div>
     </main>
+    <!-- Sidebar: base and discovered elements -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">Elements</div>
       <div id="elements" class="element-list"></div>
@@ -19,9 +21,11 @@
       <div id="discovered" class="element-list"></div>
     </aside>
   </div>
+  <!-- Controls -->
   <div class="controls">
     <button id="resetBtn">Reset Game</button>
   </div>
+  <!-- Popup for notifications -->
   <div id="popup" class="popup"></div>
   <script src="game.js"></script>
 </body>
