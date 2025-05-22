@@ -13,12 +13,14 @@
     <main class="workspace" id="workspace" tabindex="0">
       <div class="workspace-hint" id="workspaceHint">Drag elements here to combine</div>
     </main>
-    <!-- Sidebar: base and discovered elements -->
+    <!-- Sidebar with tabs -->
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">Elements</div>
+      <div class="sidebar-tabs">
+        <button id="elementsTabBtn" class="tab-btn active">Elements</button>
+        <button id="explanationsTabBtn" class="tab-btn">Explanations</button>
+      </div>
       <div id="elements" class="element-list"></div>
-      <div class="sidebar-header" style="margin-top:12px;">Discovered</div>
-      <div id="discovered" class="element-list"></div>
+      <div id="explanations" class="explanation-list"></div>
     </aside>
   </div>
   <!-- Controls -->
@@ -27,6 +29,8 @@
   </div>
   <!-- Popup for notifications -->
   <div id="popup" class="popup"></div>
+  <!-- Popup for element explanations -->
+  <div id="explanation-popup" class="explanation-popup"></div>
   <script src="game.js"></script>
 </body>
 </html>
