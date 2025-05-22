@@ -283,6 +283,27 @@ header {
   opacity: 1;
 }
 
+/* Cannot combine popup */
+.cannot-combine-popup {
+  position: fixed;
+  left: 50%;
+  top: 16%;
+  transform: translateX(-50%);
+  background: #3d2225;
+  color: #ff7070;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px #0007;
+  padding: 16px 32px;
+  font-size: 1.09rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s;
+  z-index: 201;
+}
+.cannot-combine-popup.show {
+  opacity: 1;
+}
+
 .explanation-popup {
   position: fixed;
   left: 50%;
