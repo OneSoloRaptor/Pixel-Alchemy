@@ -297,16 +297,6 @@ function workspaceBlockMouseDown(e) {
   document.addEventListener("mouseup", mouseup);
 }
 
-// --- Combination Logic: check for overlapping blocks ---
-let comboNotPossibleTO = null;
-function showComboNotPossiblePopup() {
-  const pop = document.getElementById("combo-not-possible");
-  pop.classList.add("show");
-  if (comboNotPossibleTO) clearTimeout(comboNotPossibleTO);
-  comboNotPossibleTO = setTimeout(() => {
-    pop.classList.remove("show");
-  }, 1000);
-}
 
 function checkCombinations() {
   if (workspaceElements.length < 2) return;
@@ -334,17 +324,7 @@ function checkCombinations() {
           if (isNew) showExplanationPopup(comboName);
           setTimeout(checkCombinations, 300);
           return;
-        } else {
-          // Show "not possible combination" message and push blocks aside
-          showComboNotPossiblePopup();
-          let dx = (Math.random() - 0.5) * 40, dy = (Math.random() - 0.5) * 40;
-          a.x = Math.max(0, Math.min(a.x + dx, getWorkspaceRect().width - 80));
-          a.y = Math.max(0, Math.min(a.y + dy, getWorkspaceRect().height - 80));
-          b.x = Math.max(0, Math.min(b.x - dx, getWorkspaceRect().width - 80));
-          b.y = Math.max(0, Math.min(b.y - dy, getWorkspaceRect().height - 80));
-          renderWorkspace();
-          return;
-        }
+        } 
       }
     }
   }
