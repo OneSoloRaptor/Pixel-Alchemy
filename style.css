@@ -79,49 +79,6 @@ header {
   font-size: 1.13rem;
 }
 
-/* Trash bin styles */
-.trash-bin {
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-  width: 80px;
-  height: 80px;
-  background: #282A2E;
-  border: 3px solid #3330;
-  border-radius: 18px;
-  box-shadow: 0 4px 18px #0005;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  color: #999;
-  opacity: 0.8;
-  transition: border-color 0.18s, background 0.18s, color 0.18s;
-  z-index: 20;
-  pointer-events: auto;
-}
-.trash-bin .trash-emoji {
-  font-size: 2.1rem;
-}
-.trash-bin .trash-label {
-  font-size: 0.98rem;
-  margin-top: 4px;
-  letter-spacing: 1px;
-}
-.trash-bin.active-trash {
-  border-color: #ffe066a0;
-  background: #2c2f31;
-  color: #ffe066;
-  opacity: 1;
-}
-.trash-bin.over-trash {
-  border-color: #ec4142;
-  background: #3f1c21;
-  color: #ec4142;
-  opacity: 1;
-}
-
 .sidebar {
   width: 340px;
   background: #202225;
@@ -241,9 +198,6 @@ header {
   left: 24px;
   bottom: 32px;
   z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 .controls button {
   padding: 11px 28px;
@@ -257,7 +211,6 @@ header {
   letter-spacing: 1px;
   box-shadow: 0 2px 8px #0003;
   transition: background 0.18s;
-  margin-bottom: 4px;
 }
 .controls button:hover {
   background: #444;
@@ -280,27 +233,6 @@ header {
   z-index: 200;
 }
 .popup.show {
-  opacity: 1;
-}
-
-/* Cannot combine popup */
-.cannot-combine-popup {
-  position: fixed;
-  left: 50%;
-  top: 16%;
-  transform: translateX(-50%);
-  background: #3d2225;
-  color: #ff7070;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px #0007;
-  padding: 16px 32px;
-  font-size: 1.09rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.22s;
-  z-index: 201;
-}
-.cannot-combine-popup.show {
   opacity: 1;
 }
 
@@ -385,13 +317,6 @@ header {
     padding: 12px 8px;
     overflow-x: auto;
     overflow-y: hidden;
-  }
-  .trash-bin {
-    right: 10px;
-    bottom: 10px;
-    width: 56px;
-    height: 56px;
-    font-size: 1rem;
   }
 }
 
