@@ -2,6 +2,7 @@
 
 // --- Element Data with Explanations ---
 const ELEMENTS = {
+  // --- First Tier ---
   "Conditional": {
     emoji: "🔀",
     explanation: "A structure that allows code to make decisions based on conditions (if, else)."
@@ -26,18 +27,150 @@ const ELEMENTS = {
     emoji: "🏛️",
     explanation: "A blueprint for creating objects, defining fields and methods."
   },
-  // --- Second tier ---
+  // --- Classic APCSA Topics, Expanded ---
+  "Data Type": {
+    emoji: "🔤",
+    explanation: "A classification identifying one of various types of data (int, double, boolean, etc.)."
+  },
+  "String": {
+    emoji: "💬",
+    explanation: "A sequence of characters, commonly used to represent text."
+  },
+  "char": {
+    emoji: "🔠",
+    explanation: "A primitive data type that stores a single character."
+  },
+  "int": {
+    emoji: "🔢",
+    explanation: "A primitive data type that stores integer values."
+  },
+  "double": {
+    emoji: "💧",
+    explanation: "A primitive data type that stores decimal numbers."
+  },
+  "boolean": {
+    emoji: "🔘",
+    explanation: "A primitive data type representing true or false."
+  },
+  "Assignment": {
+    emoji: "➡️",
+    explanation: "Assigns a value to a variable."
+  },
+  "Operator": {
+    emoji: "➗",
+    explanation: "Performs operations on variables and values (+, -, *, /, %, etc.)."
+  },
+  "Array": {
+    emoji: "📚",
+    explanation: "A collection of elements, all of the same type, stored in a contiguous block of memory."
+  },
+  "ArrayList": {
+    emoji: "📋",
+    explanation: "A resizable array implementation found in the Java Collections Framework."
+  },
+  "Index": {
+    emoji: "🔢",
+    explanation: "The position of an element in an array or ArrayList."
+  },
   "Constructor": {
     emoji: "🏗️",
     explanation: "A special method used to instantiate objects and initialize their state."
   },
-  "Counter": {
-    emoji: "🔢",
-    explanation: "A variable used to keep track of iterations in loops."
-  },
   "Parameter": {
     emoji: "🔣",
     explanation: "Data passed into methods to customize their operation."
+  },
+  "Return": {
+    emoji: "↩️",
+    explanation: "Providing a value back from a method to its caller."
+  },
+  "Static": {
+    emoji: "📌",
+    explanation: "A field or method that belongs to the class, not instances."
+  },
+  "this": {
+    emoji: "🫵",
+    explanation: "A reference to the current object within a method or constructor."
+  },
+  "super": {
+    emoji: "🦸",
+    explanation: "A reference to the superclass, used to access its methods and fields."
+  },
+  "Inheritance": {
+    emoji: "🧬",
+    explanation: "A mechanism where a class acquires the properties and behaviors of another class."
+  },
+  "Polymorphism": {
+    emoji: "🌀",
+    explanation: "The ability for different classes to be treated as the same type, usually via inheritance."
+  },
+  "Encapsulation": {
+    emoji: "🔒",
+    explanation: "The practice of keeping fields private and controlling access via methods."
+  },
+  "Abstraction": {
+    emoji: "🎭",
+    explanation: "The concept of hiding complex implementation details and showing only necessary features."
+  },
+  "Interface": {
+    emoji: "🔌",
+    explanation: "A reference type in Java used to specify methods a class must implement."
+  },
+  "Abstract Class": {
+    emoji: "🌫️",
+    explanation: "A class that cannot be instantiated and may have abstract methods to be implemented by subclasses."
+  },
+  "Nested Class": {
+    emoji: "🪆",
+    explanation: "A class defined inside another class."
+  },
+  "Anonymous Class": {
+    emoji: "👤",
+    explanation: "A class without a name, defined and instantiated in a single statement."
+  },
+  "Exception": {
+    emoji: "⚠️",
+    explanation: "An event that disrupts the normal flow of a program’s instructions."
+  },
+  "Try-Catch": {
+    emoji: "🛑",
+    explanation: "A block to handle exceptions and execute code safely."
+  },
+  "Null": {
+    emoji: "0️⃣",
+    explanation: "A special value indicating that a variable does not reference any object."
+  },
+  "Scanner": {
+    emoji: "🔍",
+    explanation: "A class used for obtaining input of primitive types and strings."
+  },
+  "System.out": {
+    emoji: "🖨️",
+    explanation: "The standard output stream, typically the console."
+  },
+  "Import": {
+    emoji: "📥",
+    explanation: "A statement to include external classes or packages."
+  },
+  "Package": {
+    emoji: "📦",
+    explanation: "A namespace for organizing classes and interfaces."
+  },
+  "APIs": {
+    emoji: "🔗",
+    explanation: "Application Programming Interfaces: libraries and their documentation used to interact with code."
+  },
+  "Algorithm": {
+    emoji: "🧮",
+    explanation: "A step-by-step procedure for solving a problem."
+  },
+  "Scope": {
+    emoji: "🔭",
+    explanation: "Defines where a variable or method is accessible in the code."
+  },
+  "Overloading": {
+    emoji: "➕",
+    explanation: "Defining multiple methods with the same name but different parameter lists."
   },
   "Override": {
     emoji: "🔄",
@@ -55,112 +188,100 @@ const ELEMENTS = {
     emoji: "🔂",
     explanation: "A loop that repeats as long as a condition is true."
   },
-  "Instance Variable": {
-    emoji: "📍",
-    explanation: "A variable defined in a class and tied to object instances."
-  },
-  "Boolean": {
-    emoji: "🔘",
-    explanation: "A variable or expression that is either true or false."
-  },
-  "Accessing": {
-    emoji: "📬",
-    explanation: "Retrieving or modifying the value of an object's fields."
-  },
-  "Inheritance": {
-    emoji: "🧬",
-    explanation: "A mechanism where a class acquires the properties and behaviors of another class."
-  },
-  "Signature": {
-    emoji: "✍️",
-    explanation: "The combination of a method's name and its parameter types."
-  },
-  "Return": {
-    emoji: "↩️",
-    explanation: "Providing a value back from a method to its caller."
-  },
-  "Polymorphism": {
-    emoji: "🌀",
-    explanation: "The ability for different classes to be treated as the same type, usually via inheritance."
-  },
   "For Loop": {
     emoji: "⏩",
     explanation: "A loop that runs a specific number of times, often using a counter."
   },
-  "Instance": {
-    emoji: "🪄",
-    explanation: "A concrete occurrence of any object, created from a class."
-  },
-  "Overloading": {
-    emoji: "➕",
-    explanation: "Defining multiple methods with the same name but different parameter lists."
+  "Do-While Loop": {
+    emoji: "🔄",
+    explanation: "A loop that executes at least once, then repeats as long as a condition is true."
   },
   "If Statement": {
     emoji: "❓",
     explanation: "A conditional statement that executes code only if a condition is true."
   },
-  // --- Third tier and more advanced concepts ---
-  "Interface": {
-    emoji: "🔌",
-    explanation: "A reference type in Java used to specify methods a class must implement."
+  "Else": {
+    emoji: "😶",
+    explanation: "Specifies a block of code to run if the condition in an if statement is false."
   },
-  "Abstract Class": {
-    emoji: "🌫️",
-    explanation: "A class that cannot be instantiated and may have abstract methods to be implemented by subclasses."
+  "Counter": {
+    emoji: "🔢",
+    explanation: "A variable used to keep track of iterations in loops."
   },
-  "Array": {
-    emoji: "📚",
-    explanation: "A collection of elements, all of the same type, stored in a contiguous block of memory."
+  "Instance Variable": {
+    emoji: "📍",
+    explanation: "A variable defined in a class and tied to object instances."
   },
-  "ArrayList": {
-    emoji: "📋",
-    explanation: "A resizable array implementation found in the Java Collections Framework."
+  "Instance": {
+    emoji: "🪄",
+    explanation: "A concrete occurrence of any object, created from a class."
   },
-  "Null": {
-    emoji: "0️⃣",
-    explanation: "A special value indicating that a variable does not reference any object."
+  "Accessing": {
+    emoji: "📬",
+    explanation: "Retrieving or modifying the value of an object's fields."
   },
-  "Encapsulation": {
-    emoji: "🔒",
-    explanation: "The practice of keeping fields private and controlling access via methods."
-  },
-  "Static": {
-    emoji: "📌",
-    explanation: "A field or method that belongs to the class, not instances."
-  },
-  "Casting": {
-    emoji: "🧪",
-    explanation: "Converting a variable from one type to another."
+  "Signature": {
+    emoji: "✍️",
+    explanation: "The combination of a method's name and its parameter types."
   },
   "Recursion": {
     emoji: "🔁",
     explanation: "A method calling itself to solve a problem in smaller steps."
   },
-  "Algorithm": {
-    emoji: "🧮",
-    explanation: "A step-by-step procedure for solving a problem."
+  "Casting": {
+    emoji: "🧪",
+    explanation: "Converting a variable from one type to another."
   },
-  "Scope": {
-    emoji: "🔭",
-    explanation: "Defines where a variable or method is accessible in the code."
+  "Enhanced For Loop": {
+    emoji: "➰",
+    explanation: "A loop that iterates directly over elements of an array or collection."
   },
-  "APIs": {
-    emoji: "🔗",
-    explanation: "Application Programming Interfaces: libraries and their documentation used to interact with code."
+  "Immutable": {
+    emoji: "🧊",
+    explanation: "An object whose state cannot be modified after it's created."
   },
-  "Exception": {
-    emoji: "⚠️",
-    explanation: "An event that disrupts the normal flow of a program’s instructions."
+  "Comparable": {
+    emoji: "⚖️",
+    explanation: "An interface used to define natural order comparisons of objects."
   },
-  "Try-Catch": {
-    emoji: "🛑",
-    explanation: "A block to handle exceptions and execute code safely."
-  }
+  "Comparator": {
+    emoji: "🪙",
+    explanation: "An interface for defining custom order comparisons of objects."
+  },
+  "File I/O": {
+    emoji: "📁",
+    explanation: "Reading from and writing to files."
+  },
+  "Javadoc": {
+    emoji: "📃",
+    explanation: "A tool and syntax for generating documentation from code."
+  },
+  "Command Line Args": {
+    emoji: "💻",
+    explanation: "Arguments passed to a program from the command line."
+  },
+  "Precondition": {
+    emoji: "⏮️",
+    explanation: "A condition that must be true before a method executes."
+  },
+  "Postcondition": {
+    emoji: "⏭️",
+    explanation: "A condition that must be true after a method executes."
+  },
+  "Private": {
+    emoji: "🔒",
+    explanation: "A visibility modifier limiting access to within the same class."
+  },
+  "Public": {
+    emoji: "🌐",
+    explanation: "A visibility modifier allowing access from anywhere."
+  },
+  // ...add more as needed!
 };
 
 // --- All Valid Combinations (including new/advanced ones) ---
 const COMBINATIONS = {
-  // 1st-tier
+  // Base, previous, and new combinations
   "class+method": "Constructor",
   "variable+loop": "Counter",
   "method+variable": "Parameter",
@@ -196,23 +317,57 @@ const COMBINATIONS = {
   "parameter+scope": "Encapsulation",
   "exception+try-catch": "Try-Catch",
   "object+loop": "Recursion",
-
-  // creative extras
   "loop+recursion": "Algorithm",
   "method+boolean": "Return",
   "for loop+counter": "Algorithm",
-  "object+instance": "Casting"
+  "object+instance": "Casting",
+
+  // New combinations for new elements
+  "variable+assignment": "Operator",
+  "data type+variable": "Assignment",
+  "data type+string": "char",
+  "object+casting": "Polymorphism",
+  "array+index": "Enhanced For Loop",
+  "arraylist+index": "Enhanced For Loop",
+  "string+operator": "Concatenation",
+  "method+return": "Algorithm",
+  "instance+variable": "Instance Variable",
+  "int+operator": "double",
+  "signature+overloading": "Override",
+  "private+encapsulation": "Instance Variable",
+  "public+class": "Package",
+  "import+api": "APIs",
+  "package+import": "APIs",
+  "array+array": "ArrayList",
+  "object+object": "Instance",
+  "do-while loop+boolean": "While Loop",
+  "for loop+array": "Enhanced For Loop",
+  "boolean+operator": "Conditional",
+  "scanner+system.out": "User Input",
+  "scanner+variable": "Assignment",
+  "class+abstract class": "Abstraction",
+  "object+interface": "Polymorphism",
+  "comparator+comparable": "Sorting",
+  "algorithm+data type": "Scope",
+  "exception+try-catch": "File I/O",
+  "javadoc+method": "Documentation",
+  "precondition+postcondition": "Contract",
+  "command line args+main method": "APIs",
+  "instance variable+scope": "Encapsulation",
+  // ...add more as desired!
 };
 
 // --- Base Elements ---
 const BASE_ELEMENT_KEYS = [
-  "Conditional", "Method", "Variable", "Object", "Loop", "Class"
+  "Conditional", "Method", "Variable", "Object", "Loop", "Class",
+  "Data Type", "String", "int", "double", "boolean", "Operator", "Assignment", "Array", "ArrayList"
 ];
 
 // --- State ---
 let workspaceElements = []; // {name, emoji, x, y, id}
 let discoveredElements = JSON.parse(localStorage.getItem("discovered") || "[]"); // {name, emoji}
 let draggingElem = null, dragOffset = {x:0, y:0}, dragStartPos = {x:0, y:0};
+let isDraggingToTrash = false;
 
 // --- UI State ---
 let sidebarTab = "elements"; // "elements" or "explanations"
@@ -270,7 +425,16 @@ function renderSidebarElements() {
 function renderDiscoveredExplanations() {
   const expList = document.getElementById("explanations");
   expList.innerHTML = "";
-  // Show all discovered EXCEPT base elements
+  // Show all discovered EXCEPT base elements, plus base elements always
+  BASE_ELEMENT_KEYS.forEach(name => {
+    const {emoji, explanation} = getElementData(name);
+    const div = document.createElement("div");
+    div.className = "element explanation";
+    div.innerHTML = `<span class="emoji">${emoji}</span>
+      <span class="label">${name}</span>
+      <div class="explanation-text">${explanation}</div>`;
+    expList.appendChild(div);
+  });
   discoveredElements
     .filter(({name}) => !BASE_ELEMENT_KEYS.includes(name))
     .forEach(({name}) => {
@@ -342,11 +506,13 @@ function sidebarMouseDown(e) {
   document.addEventListener("mousemove", mousemove);
   document.addEventListener("mouseup", mouseup);
 }
-// --- Workspace block drag (move or merge) ---
+
+// --- Workspace block drag (move or merge, or trash) ---
 function workspaceBlockMouseDown(e) {
   const blockDiv = e.currentTarget;
   const ws = document.getElementById("workspace");
   const wsRect = ws.getBoundingClientRect();
+  const trashBin = document.getElementById("trashBin");
   const id = blockDiv.dataset.id;
   const block = getElemById(id);
   draggingElem = blockDiv;
@@ -356,6 +522,8 @@ function workspaceBlockMouseDown(e) {
     x: e.clientX - wsRect.left - block.x,
     y: e.clientY - wsRect.top - block.y
   };
+  trashBin.classList.add("active-trash");
+  isDraggingToTrash = false;
   function mousemove(ev) {
     let x = ev.clientX - wsRect.left - dragOffset.x;
     let y = ev.clientY - wsRect.top - dragOffset.y;
@@ -363,15 +531,33 @@ function workspaceBlockMouseDown(e) {
     y = Math.max(0, Math.min(y, wsRect.height - 80));
     draggingElem.style.left = x + "px";
     draggingElem.style.top = y + "px";
+    // Check for overlap with trash bin
+    const trashRect = trashBin.getBoundingClientRect();
+    const elemRect = draggingElem.getBoundingClientRect();
+    if (isOverlap(trashRect, elemRect)) {
+      trashBin.classList.add("over-trash");
+      isDraggingToTrash = true;
+    } else {
+      trashBin.classList.remove("over-trash");
+      isDraggingToTrash = false;
+    }
   }
   function mouseup(ev) {
     document.removeEventListener("mousemove", mousemove);
     document.removeEventListener("mouseup", mouseup);
     draggingElem.classList.remove("dragging");
+    trashBin.classList.remove("active-trash");
+    trashBin.classList.remove("over-trash");
     let x = ev.clientX - wsRect.left - dragOffset.x;
     let y = ev.clientY - wsRect.top - dragOffset.y;
     x = Math.max(0, Math.min(x, wsRect.width - 80));
     y = Math.max(0, Math.min(y, wsRect.height - 80));
+    if (isDraggingToTrash) {
+      workspaceElements = workspaceElements.filter(e => e.id !== id);
+      renderWorkspace();
+      isDraggingToTrash = false;
+      return;
+    }
     block.x = x; block.y = y;
     draggingElem.style.left = x + "px";
     draggingElem.style.top = y + "px";
@@ -463,6 +649,12 @@ function resetGame() {
   showPopup("Game Reset!");
 }
 
+function cleanBoard() {
+  workspaceElements = [];
+  renderWorkspace();
+  showPopup("Board cleaned!");
+}
+
 // --- Main ---
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("elementsTabBtn").onclick = () => {
@@ -478,4 +670,5 @@ window.addEventListener("DOMContentLoaded", () => {
   renderWorkspace();
   renderSidebar();
   document.getElementById("resetBtn").onclick = resetGame;
+  document.getElementById("cleanBoardBtn").onclick = cleanBoard;
 });
