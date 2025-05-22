@@ -249,29 +249,6 @@ header {
   opacity: 1;
 }
 
-/* Not possible combination popup */
-.combo-not-possible {
-  position: fixed;
-  left: 50%;
-  top: 5%;
-  transform: translateX(-50%);
-  background: #2b2d31;
-  color: #ff5a5a;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px #0007;
-  padding: 18px 34px;
-  font-size: 1.07rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s;
-  z-index: 300;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-.combo-not-possible.show {
-  opacity: 1;
-}
-
 .popup {
   position: fixed;
   left: 50%;
