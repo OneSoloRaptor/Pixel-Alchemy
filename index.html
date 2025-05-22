@@ -12,6 +12,10 @@
     <!-- Workspace: where elements are dragged and merged -->
     <main class="workspace" id="workspace" tabindex="0">
       <div class="workspace-hint" id="workspaceHint">Drag elements here to combine</div>
+      <!-- Trash can for deleting elements -->
+      <div id="trashCan" class="trash-can" title="Drag here to delete">
+        🗑️
+      </div>
     </main>
     <!-- Sidebar with tabs -->
     <aside class="sidebar" id="sidebar">
@@ -25,12 +29,15 @@
   </div>
   <!-- Controls -->
   <div class="controls">
+    <button id="cleanBoardBtn">Clean Board</button>
     <button id="resetBtn">Reset Game</button>
   </div>
   <!-- Popup for notifications -->
   <div id="popup" class="popup"></div>
   <!-- Popup for element explanations -->
   <div id="explanation-popup" class="explanation-popup"></div>
+  <!-- Popup for invalid combinations -->
+  <div id="combo-not-possible" class="combo-not-possible">Not a possible combination</div>
   <script src="game.js"></script>
 </body>
 </html>
