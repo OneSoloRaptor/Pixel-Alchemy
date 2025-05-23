@@ -137,22 +137,7 @@ function renderSidebarElements() {
     div.addEventListener("mousedown", sidebarMouseDown);
     elList.appendChild(div);
   });
-  // Discovered
-  discoveredElements.forEach(({name}) => {
-    if (BASE_ELEMENT_KEYS.includes(name)) return;
-    const {emoji} = getElementData(name);
-    const div = document.createElement("div");
-    div.className = "element discovered";
-    div.draggable = false;
-    div.dataset.element = name;
-    div.innerHTML = `<span class="emoji">${emoji}</span><span class="label">${name}</span>`;
-    div.addEventListener("mousedown", sidebarMouseDown);
-    elList.appendChild(div);
-  });
-}
-function renderDiscoveredExplanations() {
-  const expList = document.getElementById("explanations");
-  expList.innerHTML = "";
+   // Then show discovered non-base elements
   discoveredElements
     .filter(({name}) => !BASE_ELEMENT_KEYS.includes(name))
     .forEach(({name}) => {
@@ -164,6 +149,22 @@ function renderDiscoveredExplanations() {
         <div class="explanation-text">${explanation}</div>`;
       expList.appendChild(div);
     });
+}
+function renderDiscoveredExplanations() {
+  const expList = document.getElementById("explanations");
+  expList.innerHTML = "";
+
+  // Show explanations for base elements first
+  BASE_ELEMENT_KEYS.forEach((name) => {
+    const {emoji, explanation} = getElementData(name);
+    const div = document.createElement("div");
+    div.className = "element explanation base";
+    div.innerHTML = `<span class="emoji">${emoji}</span>
+      <span class="label">${name}</span>
+      <div class="explanation-text">${explanation}</div>`;
+    expList.appendChild(div);
+  });
+
   if (expList.innerHTML === "") {
     expList.innerHTML = "<div class='no-explanations'>Discover elements to see explanations!</div>";
   }
