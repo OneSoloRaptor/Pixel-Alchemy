@@ -164,10 +164,6 @@ function renderDiscoveredExplanations() {
       <div class="explanation-text">${explanation}</div>`;
     expList.appendChild(div);
   });
-
-  if (expList.innerHTML === "") {
-    expList.innerHTML = "<div class='no-explanations'>Discover elements to see explanations!</div>";
-  }
 }
 function renderWorkspace() {
   const ws = document.getElementById("workspace");
