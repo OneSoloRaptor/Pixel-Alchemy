@@ -125,14 +125,17 @@ function renderSidebarElements() {
     div.addEventListener("mousedown", sidebarMouseDown);
     elList.appendChild(div);
   });
-  // Then show discovered non-base elements (in sidebar)
+  // Then show discovered non-base elements (in sidebar) — make draggable
   discoveredElements
     .filter(({name}) => !BASE_ELEMENT_KEYS.includes(name))
     .forEach(({name}) => {
       const {emoji} = getElementData(name);
       const div = document.createElement("div");
       div.className = "element discovered";
+      div.draggable = false;
+      div.dataset.element = name; // ADD THIS LINE
       div.innerHTML = `<span class="emoji">${emoji}</span><span class="label">${name}</span>`;
+      div.addEventListener("mousedown", sidebarMouseDown); // ADD THIS LINE
       elList.appendChild(div);
     });
 }
