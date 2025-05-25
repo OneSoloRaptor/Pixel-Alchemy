@@ -1,14 +1,11 @@
 // ===== Pixel Alchemy: APCSA Edition =====
-// --- Element Data with Explanations ---
 const ELEMENTS = {
-  // ...[unchanged, keep all element definitions as in your file]...
   "Conditional": { emoji: "🔀", explanation: "A structure that allows code to make decisions based on conditions (if, else)." },
   "Method": { emoji: "🔧", explanation: "A block of code within a class that performs a specific task. Called using objects or class names." },
   "Variable": { emoji: "📦", explanation: "A container for storing data values, with a type and identifier." },
   "Object": { emoji: "🧱", explanation: "An instance of a class that holds state and can perform actions via methods." },
   "Loop": { emoji: "🔁", explanation: "A way to repeat code multiple times (for, while, do-while)." },
   "Class": { emoji: "🏛️", explanation: "A blueprint for creating objects, defining fields and methods." },
-  // --- Second tier ---
   "Constructor": { emoji: "🏗️", explanation: "A special method used to instantiate objects and initialize their state." },
   "Counter": { emoji: "🔢", explanation: "A variable used to keep track of iterations in loops." },
   "Parameter": { emoji: "🔣", explanation: "Data passed into methods to customize their operation." },
@@ -27,7 +24,6 @@ const ELEMENTS = {
   "Instance": { emoji: "🪄", explanation: "A concrete occurrence of any object, created from a class." },
   "Overloading": { emoji: "➕", explanation: "Defining multiple methods with the same name but different parameter lists." },
   "If Statement": { emoji: "❓", explanation: "A conditional statement that executes code only if a condition is true." },
-  // --- Third tier and more advanced concepts ---
   "Interface": { emoji: "🔌", explanation: "A reference type in Java used to specify methods a class must implement." },
   "Abstract Class": { emoji: "🌫️", explanation: "A class that cannot be instantiated and may have abstract methods to be implemented by subclasses." },
   "Array": { emoji: "📚", explanation: "A collection of elements, all of the same type, stored in a contiguous block of memory." },
@@ -44,9 +40,7 @@ const ELEMENTS = {
   "Try-Catch": { emoji: "🛑", explanation: "A block to handle exceptions and execute code safely." }
 };
 
-// --- All Valid Combinations (including new/advanced ones) ---
 const COMBINATIONS = {
-  // [unchanged, keep your current combos...]
   "class+method": "Constructor",
   "variable+loop": "Counter",
   "method+variable": "Parameter",
@@ -58,7 +52,6 @@ const COMBINATIONS = {
   "conditional+variable": "Boolean",
   "object+variable": "Accessing",
   "object+class": "Inheritance",
-  // 2nd-tier
   "while loop+counter": "For Loop",
   "class+subclass": "Polymorphism",
   "constructor+object": "Instance",
@@ -66,7 +59,6 @@ const COMBINATIONS = {
   "method+parameter": "Signature",
   "signature+constructor": "Overloading",
   "call+boolean": "If Statement",
-  // 3rd-tier and advanced
   "class+interface": "Abstract Class",
   "class+abstract class": "Interface",
   "variable+object": "Null",
@@ -80,25 +72,20 @@ const COMBINATIONS = {
   "parameter+scope": "Encapsulation",
   "exception+try-catch": "Try-Catch",
   "object+loop": "Recursion",
-  // creative extras
   "loop+recursion": "Algorithm",
   "method+boolean": "Return",
   "for loop+counter": "Algorithm",
   "object+instance": "Casting"
 };
 
-// --- Base Elements ---
 const BASE_ELEMENT_KEYS = [
   "Conditional", "Method", "Variable", "Object", "Loop", "Class"
 ];
 
-// --- State ---
-let workspaceElements = []; // {name, emoji, x, y, id}
-let discoveredElements = JSON.parse(localStorage.getItem("discovered") || "[]"); // {name, emoji}
+let workspaceElements = [];
+let discoveredElements = JSON.parse(localStorage.getItem("discovered") || "[]");
 let draggingElem = null, dragOffset = {x:0, y:0}, dragStartPos = {x:0, y:0};
-
-// --- UI State ---
-let sidebarTab = "elements"; // "elements" or "explanations"
+let sidebarTab = "elements";
 
 // --- Helpers ---
 function makeId() {
@@ -127,6 +114,7 @@ function renderSidebar() {
 function renderSidebarElements() {
   const elList = document.getElementById("elements");
   elList.innerHTML = "";
+  // Add base elements
   BASE_ELEMENT_KEYS.forEach(name => {
     const {emoji} = getElementData(name);
     const div = document.createElement("div");
@@ -137,7 +125,31 @@ function renderSidebarElements() {
     div.addEventListener("mousedown", sidebarMouseDown);
     elList.appendChild(div);
   });
-   // Then show discovered non-base elements
+  // Then show discovered non-base elements (in sidebar)
+  discoveredElements
+    .filter(({name}) => !BASE_ELEMENT_KEYS.includes(name))
+    .forEach(({name}) => {
+      const {emoji} = getElementData(name);
+      const div = document.createElement("div");
+      div.className = "element discovered";
+      div.innerHTML = `<span class="emoji">${emoji}</span><span class="label">${name}</span>`;
+      elList.appendChild(div);
+    });
+}
+function renderDiscoveredExplanations() {
+  const expList = document.getElementById("explanations");
+  expList.innerHTML = "";
+  // Show explanations for base elements first
+  BASE_ELEMENT_KEYS.forEach((name) => {
+    const {emoji, explanation} = getElementData(name);
+    const div = document.createElement("div");
+    div.className = "element explanation base";
+    div.innerHTML = `<span class="emoji">${emoji}</span>
+      <span class="label">${name}</span>
+      <div class="explanation-text">${explanation}</div>`;
+    expList.appendChild(div);
+  });
+  // Then show discovered non-base elements with explanations
   discoveredElements
     .filter(({name}) => !BASE_ELEMENT_KEYS.includes(name))
     .forEach(({name}) => {
@@ -149,21 +161,6 @@ function renderSidebarElements() {
         <div class="explanation-text">${explanation}</div>`;
       expList.appendChild(div);
     });
-}
-function renderDiscoveredExplanations() {
-  const expList = document.getElementById("explanations");
-  expList.innerHTML = "";
-
-  // Show explanations for base elements first
-  BASE_ELEMENT_KEYS.forEach((name) => {
-    const {emoji, explanation} = getElementData(name);
-    const div = document.createElement("div");
-    div.className = "element explanation base";
-    div.innerHTML = `<span class="emoji">${emoji}</span>
-      <span class="label">${name}</span>
-      <div class="explanation-text">${explanation}</div>`;
-    expList.appendChild(div);
-  });
 }
 function renderWorkspace() {
   const ws = document.getElementById("workspace");
@@ -190,19 +187,19 @@ function sidebarMouseDown(e) {
   if (!elementName) return;
   const ws = document.getElementById("workspace");
   const wsRect = ws.getBoundingClientRect();
-  const mouseMoveHandler = (me) => {
-    let x = me.clientX - wsRect.left - 40;
-    let y = me.clientY - wsRect.top - 40;
-    dragGhost.style.left = x + "px";
-    dragGhost.style.top = y + "px";
-  };
   const dragGhost = document.createElement("div");
   dragGhost.className = "workspace-block dragging";
   dragGhost.style.position = "absolute";
   dragGhost.innerHTML = `<span class="emoji">${emoji}</span><span class="label">${elementName}</span>`;
   dragGhost.style.pointerEvents = "none";
   ws.appendChild(dragGhost);
-  function mousemove(e2) { mouseMoveHandler(e2); }
+
+  function mouseMoveHandler(me) {
+    let x = me.clientX - wsRect.left - 40;
+    let y = me.clientY - wsRect.top - 40;
+    dragGhost.style.left = x + "px";
+    dragGhost.style.top = y + "px";
+  }
   function mouseup(e2) {
     document.removeEventListener("mousemove", mousemove);
     document.removeEventListener("mouseup", mouseup);
@@ -215,6 +212,7 @@ function sidebarMouseDown(e) {
       setTimeout(checkCombinations, 100);
     }
   }
+  function mousemove(e2) { mouseMoveHandler(e2); }
   document.addEventListener("mousemove", mousemove);
   document.addEventListener("mouseup", mouseup);
 }
@@ -294,7 +292,6 @@ function workspaceBlockMouseDown(e) {
   document.addEventListener("mouseup", mouseup);
 }
 
-
 function checkCombinations() {
   if (workspaceElements.length < 2) return;
   for (let i = 0; i < workspaceElements.length; i++) {
@@ -321,7 +318,7 @@ function checkCombinations() {
           if (isNew) showExplanationPopup(comboName);
           setTimeout(checkCombinations, 300);
           return;
-        } 
+        }
       }
     }
   }
@@ -374,7 +371,6 @@ function resetGame() {
   showPopup("Game Reset!");
 }
 
-// --- Clean Board Button Logic ---
 function cleanBoard() {
   workspaceElements = [];
   renderWorkspace();
