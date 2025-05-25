@@ -42,12 +42,12 @@ const ELEMENTS = {
 
 const COMBINATIONS = {
   "class+method": "Constructor",
-  "variable+loop": "Counter",
+  "loop+variable": "Counter",
   "method+variable": "Parameter",
   "method+method": "Override",
   "object+method": "Call",
   "class+class": "Subclass",
-  "loop+conditional": "While Loop",
+  "conditional+loop": "While Loop",
   "class+variable": "Instance Variable",
   "conditional+variable": "Boolean",
   "object+variable": "Accessing",
@@ -75,7 +75,6 @@ const COMBINATIONS = {
   "loop+recursion": "Algorithm",
   "method+boolean": "Return",
   "for loop+counter": "Algorithm",
-  "object+instance": "Casting"
 };
 
 const BASE_ELEMENT_KEYS = [
