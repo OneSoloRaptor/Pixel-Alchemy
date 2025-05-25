@@ -51,8 +51,8 @@ const COMBINATIONS = {
   "class+variable": "Instance Variable",
   "conditional+variable": "Boolean",
   "object+variable": "Accessing",
-  "object+class": "Inheritance",
-  "while loop+counter": "For Loop",
+  "class+object": "Inheritance",
+  "counter+while loop": "For Loop",
   "class+subclass": "Polymorphism",
   "constructor+object": "Instance",
   "call+variable": "Return",
@@ -73,7 +73,7 @@ const COMBINATIONS = {
   "exception+try-catch": "Try-Catch",
   "object+loop": "Recursion",
   "loop+recursion": "Algorithm",
-  "method+boolean": "Return",
+  "boolean+method": "Return",
   "for loop+counter": "Algorithm",
 };
 
